@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width,initial-scale=1"></meta>
+  {% block head %}
+  <title>{% block title %}{% endblock %}</title>
+  {% endblock %}
+  <style>
+    body {
+      margin:40px auto;
+      max-width:650px;
+      line-height:1.6;
+      font-size:18px;
+      color:#444;
+      padding: 0 10px;
+    }
+    h1,h2,h3 {
+      line-height:1.2;
+    }
+  </style>
+</head>
+<body style="text-align: center;">
+    <div id="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <div id="footer">
+        {% block footer %}
+        generated at {{ now() }}
+        {% endblock %}
+    </div>
+</body>
+</html>

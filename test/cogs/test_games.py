@@ -58,6 +58,7 @@ class TestGamesCog(unittest.TestCase):
                     "games": [
                         {
                             "gameType": "R",
+                            "gameDate": "2018-10-04",
                             "season": "20182019",
                             "marker": 1,
                             "status": {
@@ -72,6 +73,7 @@ class TestGamesCog(unittest.TestCase):
                     "games": [
                         {
                             "gameType": "R",
+                            "gameDate": "2018-10-05",
                             "season": "20182019",
                             "marker": 2,
                             "status": {
@@ -80,6 +82,7 @@ class TestGamesCog(unittest.TestCase):
                         },
                         {
                             "gameType": "R",
+                            "gameDate": "2018-10-05",
                             "season": "20182019",
                             "marker": 3,
                             "status": {
@@ -88,6 +91,7 @@ class TestGamesCog(unittest.TestCase):
                         },
                         {
                             "gameType": "P",
+                            "gameDate": "2018-10-05",
                             "season": "20182019",
                             "marker": 4,
                             "status": {
@@ -96,6 +100,7 @@ class TestGamesCog(unittest.TestCase):
                         },
                         {
                             "gameType": "R",
+                            "gameDate": "2018-10-05",
                             "season": "20192020",
                             "marker": 5,
                             "status": {
@@ -104,6 +109,7 @@ class TestGamesCog(unittest.TestCase):
                         },
                         {
                             "gameType": "R",
+                            "gameDate": "2018-10-05",
                             "season": "20182019",
                             "marker": 7,
                             "status": {
@@ -129,29 +135,36 @@ class TestGamesCog(unittest.TestCase):
         self.wheel.add(cog)
         self.wheel.start()
         cog.output.assert_called_once()
-        cog.output.assert_called_with([
-            {
-                "gameType": "R",
-                "season": "20182019",
-                "marker": 1,
-                "status": {
-                    "abstractGameState": "Final",
+        cog.output.assert_called_with({
+            "2018-10-04": [
+                {
+                    "gameType": "R",
+                    "gameDate": "2018-10-04",
+                    "season": "20182019",
+                    "marker": 1,
+                    "status": {
+                        "abstractGameState": "Final",
+                    },
                 },
-            },
-            {
-                "gameType": "R",
-                "season": "20182019",
-                "marker": 2,
-                "status": {
-                    "abstractGameState": "Final",
+            ],
+            "2018-10-05": [
+                {
+                    "gameType": "R",
+                    "gameDate": "2018-10-05",
+                    "season": "20182019",
+                    "marker": 2,
+                    "status": {
+                        "abstractGameState": "Final",
+                    },
                 },
-            },
-            {
-                "gameType": "R",
-                "season": "20182019",
-                "marker": 3,
-                "status": {
-                    "abstractGameState": "Final",
-                },
-            }
-        ])
+                {
+                    "gameType": "R",
+                    "gameDate": "2018-10-05",
+                    "season": "20182019",
+                    "marker": 3,
+                    "status": {
+                        "abstractGameState": "Final",
+                    },
+                }
+            ]
+        })

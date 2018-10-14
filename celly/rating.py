@@ -55,12 +55,15 @@ class RatingModel:
         
         hexp, aexp = self._expected_scores(hr, ar)
         hact, aact = self._actual_scores(hscore, ascore, period)
+
         hgp = self.ratings[hid]["gp"]
         hnr = self._update_rating(hr, hact, hexp, hgp)
         self.ratings[hid]["rating"] = hnr
         self.ratings[hid]["gp"] += 1
+        self.ratings[hid]["diff"] = hnr - hr
 
         agp = self.ratings[aid]["gp"]
         anr = self._update_rating(ar, aact, aexp, agp)
         self.ratings[aid]["rating"] = anr
         self.ratings[aid]["gp"] += 1
+        self.ratings[aid]["diff"] = anr - ar

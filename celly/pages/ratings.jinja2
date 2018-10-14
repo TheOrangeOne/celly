@@ -1,0 +1,17 @@
+{% extends "template.jinja2" %}
+{% block title %}{{ date }}{% endblock %}
+{% block head %}
+    {{ super() }}
+    <style type="text/css">
+        .important { color: #336699; }
+    </style>
+{% endblock %}
+{% block content %}
+<ul>
+{% for update in rating_changes %}
+<li>
+  {{ update.id }}: {{ update.rating }} ({{ update.diff }})
+</li>
+{% endfor %}
+</ul>
+{% endblock %}
