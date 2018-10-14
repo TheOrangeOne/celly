@@ -95,7 +95,7 @@ class TestScheduleUpdateCog(unittest.TestCase):
                 }
             ]
         }]
-        assert self.cog._last_update(sched) == datetime.strptime("2018-10-05", "%Y-%m-%d")
+        assert self.cog._last_update(sched) == "2018-10-05"
 
     def test_merge_new_schedule(self):
         old_sched = [
