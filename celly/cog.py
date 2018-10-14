@@ -13,6 +13,7 @@ class Cog(object):
     def output(*inputs):
         raise NotImplementedError()
 
+
 class PrintCog(Cog):
     def output(self, *inputs):
         print(*inputs)
