@@ -1,9 +1,16 @@
 from celly.cog import Cog
+from celly.file import File
 from celly.pages import env
 from celly.rating import RatingModel, normalize_rating
 
 
-class RatingsCog(Cog):
+def get_team_id_score(team):
+    id = team["team"]["id"]
+    score = team["score"]
+    return id, score
+
+
+class TeamRatingsByDayCog(Cog):
     """Cog for generating ratings.
 
     Input: list of games completed games
@@ -11,34 +18,30 @@ class RatingsCog(Cog):
     Output: ratings by date grouped by team id
     """
 
-    def output(self, days):
-        model = RatingModel()
-        ratings = {}
+    def output(self, days, teams):
+        model = RatingModel(teams)
+        ratings_by_day = {}
         for date, games in days.items():
+            # clear out the diffs before each team for the day
+            model.clear_diffs()
+
             for game in games:
-                linescore = game["linescore"]
                 teams = game["teams"]
-                period = linescore["currentPeriod"]
+                period = game["linescore"]["currentPeriod"]
 
-                home = teams["home"]
-                hid = home["team"]["id"]
-                hscore = home["score"]
-
-                away = teams["away"]
-                aid = away["team"]["id"]
-                ascore = away["score"]
-
+                hid, hscore = get_team_id_score(teams["home"])
+                aid, ascore = get_team_id_score(teams["away"])
                 model.calculate_rating((hid, hscore), (aid, ascore), period)
+            ratings_by_day[date] = model.copyratings()
 
-                for id in [hid, aid]:
-                    if date not in ratings:
-                        ratings[date] = {}
-                    ratings[date][id] = dict(model.ratings[id])
-
-        return ratings
+        return ratings_by_day
 
 
-class RenderRatingsCog(Cog):
+class RenderRatingsByDayCog(Cog):
+    """
+    Input: RatingsByDay data
+    Output: list of File for each day
+    """
     def output(self, ratings_by_day):
         pages = []
         rating_changes = []
@@ -49,11 +52,16 @@ class RenderRatingsCog(Cog):
                     "rating": update["rating"],
                     "diff": update["diff"],
                 })
-            temp = env.get_template("ratings.html")
+            temp = env.get_template("ratings.jinja2")
             r = temp.render(
                 date=date,
                 rating_changes=rating_changes,
             )
-            pages.append(r)
+            name = "{}-ratings.html".format(date)
+            page = File(
+                name=name,
+                src=r,
+            )
+            pages.append(page)
 
         return pages

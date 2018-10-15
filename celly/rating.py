@@ -1,3 +1,5 @@
+import copy
+
 def normalize_rating(rating, min=1400, max=1600):
     return ((rating - min) / (max - min))*100
 
@@ -6,8 +8,14 @@ class RatingModel:
     HF = 0
     SP = 400
 
-    def __init__(self, ratings={}, ir=1500.0, hf=0, sp=400, kf=None):
-        self.ratings = ratings
+    def __init__(self, ids={}, ir=1500.0, hf=0, sp=400, kf=None):
+        self.ratings = {}
+        for id in ids:
+            self.ratings[id] = {
+                "rating": ir,
+                "gp": 0,
+                "diff": 0.0,
+            }
         self.IR = ir
         self.HF = hf
         self.SP = sp
@@ -67,3 +75,10 @@ class RatingModel:
         self.ratings[aid]["rating"] = anr
         self.ratings[aid]["gp"] += 1
         self.ratings[aid]["diff"] = anr - ar
+
+    def clear_diffs(self):
+        for id, data in self.ratings.items():
+            data["diff"] = 0.0
+
+    def copyratings(self):
+        return copy.deepcopy(self.ratings)

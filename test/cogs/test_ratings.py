@@ -3,7 +3,7 @@ import unittest.mock as mock
 
 from celly.cog import Cog
 from celly.cogwheel import CogWheel
-from celly.cogs.ratings import RatingsCog, RenderRatingsCog
+from celly.cogs.ratings import TeamRatingsByDayCog, RenderRatingsByDayCog
 
 
 class TestRatingsCog(unittest.TestCase):
@@ -12,8 +12,16 @@ class TestRatingsCog(unittest.TestCase):
 
     def test_ratings_basic(self):
         self.wheel.add(Cog(
+            name="teams",
+            output=lambda: {
+                1: {},
+                2: {},
+            }
+        ))
+        self.wheel.add(Cog(
             name="games",
             output=lambda: {
+                "2018-10-12": [],
                 "2018-10-13": [{
                     "gameType": "R",
                     "gameDate": "2018-10-13T17:00:00Z",
@@ -36,9 +44,10 @@ class TestRatingsCog(unittest.TestCase):
                         "currentPeriod": 3
                     },
                 }],
-                "2018-10-14": [{
+                "2018-10-14": [],
+                "2018-10-15": [{
                     "gameType": "R",
-                    "gameDate": "2018-10-14T17:00:00Z",
+                    "gameDate": "2018-10-15T17:00:00Z",
                     "season": "20182019",
                     "teams": {
                         "home": {
@@ -59,9 +68,9 @@ class TestRatingsCog(unittest.TestCase):
                     },
                 }],
             }))
-        self.wheel.add(RatingsCog(
+        self.wheel.add(TeamRatingsByDayCog(
             name="ratings",
-            inputs=["games"],
+            inputs=["games", "teams"],
         ))
 
         cog = Cog("check", inputs=["ratings"])
@@ -71,6 +80,18 @@ class TestRatingsCog(unittest.TestCase):
         self.wheel.start()
         cog.output.assert_called_once()
         cog.output.assert_called_with({
+            "2018-10-12": {
+                1: {
+                    "rating": 1500.0,
+                    "gp": 0,
+                    "diff": 0.0,
+                },
+                2: {
+                    "rating": 1500.0,
+                    "gp": 0,
+                    "diff": 0.0,
+                },
+            },
             "2018-10-13": {
                 1: {
                     "rating": 1507.5,
@@ -84,6 +105,18 @@ class TestRatingsCog(unittest.TestCase):
                 },
             },
             "2018-10-14": {
+                1: {
+                    "rating": 1507.5,
+                    "gp": 1,
+                    "diff": 0.0,
+                },
+                2: {
+                    "rating": 1492.5,
+                    "gp": 1,
+                    "diff": 0.0,
+                },
+            },
+            "2018-10-15": {
                 1: {
                     "rating": 1514.6764000042328,
                     "gp": 2,
@@ -126,7 +159,7 @@ class TestRatingsCog(unittest.TestCase):
                     }
                 }
             }))
-        self.wheel.add(RenderRatingsCog(
+        self.wheel.add(RenderRatingsByDayCog(
             name="render",
             inputs=["ratings"],
         ))
@@ -137,5 +170,4 @@ class TestRatingsCog(unittest.TestCase):
         self.wheel.add(cog)
         self.wheel.start()
         cog.output.assert_called_once()
-        # cog.output.assert_called_with([
-        # ])
+        # cog.output.assert_called_with([])

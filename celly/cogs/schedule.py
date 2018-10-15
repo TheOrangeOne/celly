@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from functools import reduce
 
 from celly.cog import Cog
+from celly.nhl import API
 from celly.web import get_json
 
 """
@@ -75,7 +76,6 @@ API returns _nothing_ in the "dates" field.
 """
 
 class ScheduleUpdateCog(Cog):
-    API_BASE       = "https://statsapi.web.nhl.com/api/v1/"
     DATE_F         = "%Y-%m-%d"
     SEASON_START_F = "2018-10-04"
     SEASON_START   = datetime.strptime(SEASON_START_F, DATE_F)
@@ -83,7 +83,7 @@ class ScheduleUpdateCog(Cog):
     def _fetch_data(self, start, end):
         endpoint = "schedule?startDate={}&endDate={}&expand=schedule.linescore"
         endpoint = endpoint.format(start, end)
-        url = "{}{}".format(self.API_BASE, endpoint)
+        url = "{}{}".format(API, endpoint)
         r = get_json(url)
         return r
 
