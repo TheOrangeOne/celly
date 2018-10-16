@@ -1,6 +1,9 @@
+from celly.date import next_ymd, prev_ymd
 from celly.cog import Cog
+from celly.cogs.teams import get_id_abbr
 from celly.file import File
 from celly.pages import env
+from celly.pages.ratings import ratings_page
 from celly.rating import RatingModel, normalize_rating
 
 
@@ -37,29 +40,40 @@ class TeamRatingsByDayCog(Cog):
         return ratings_by_day
 
 
+def day_ratings(ratings, teams):
+    ratings_for_day = []
+    for id, rating in ratings.items():
+        abbr = get_id_abbr(teams, id)
+        ratings_for_day.append(dict(
+            abbr=abbr,
+            rating=rating["rating"],
+            diff=rating["diff"],
+        ))
+    ratings_for_day = sorted(
+        ratings_for_day,
+        key=lambda r: r["rating"],
+        reverse=True
+    )
+    return ratings_for_day
+
+
 class RenderRatingsByDayCog(Cog):
     """
     Input: RatingsByDay data
     Output: list of File for each day
     """
-    def output(self, ratings_by_day):
+    def output(self, ratings_by_day, teams):
         pages = []
-        rating_changes = []
-        for date, updates in ratings_by_day.items():
-            for id, update in updates.items():
-                rating_changes.append({
-                    "id": id,
-                    "rating": update["rating"],
-                    "diff": update["diff"],
-                })
+        for date, ratings in ratings_by_day.items():
+            ratings_for_day = day_ratings(ratings, teams)
             temp = env.get_template("ratings.jinja2")
             r = temp.render(
                 date=date,
-                rating_changes=rating_changes,
+                teams=teams,
+                day_ratings=ratings_for_day,
             )
-            name = "{}-ratings.html".format(date)
             page = File(
-                name=name,
+                name=ratings_page(date),
                 src=r,
             )
             pages.append(page)

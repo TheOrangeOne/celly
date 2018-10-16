@@ -79,7 +79,7 @@ wheel.add(TeamRatingsByDayCog(
 
 wheel.add(RenderRatingsByDayCog(
     name="rendered_current_season_ratings",
-    inputs=["current_season_ratings_by_day"]
+    inputs=["current_season_ratings_by_day", "teams"]
 ))
 
 wheel.add(WriteFiles(

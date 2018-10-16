@@ -1,7 +1,10 @@
 # celly
 
 ## install
-all you need is python3!
+
+```sh
+$ pip install -r requirements.txt
+```
 
 
 ## testing

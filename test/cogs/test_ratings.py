@@ -132,36 +132,47 @@ class TestRatingsCog(unittest.TestCase):
 
     def test_render_page(self):
         self.wheel.add(Cog(
-            name="ratings",
+            name="teams",
             output=lambda: {
                 1: {
-                    "2018-10-13": {
+                    "abbreviation": "TOR"
+                },
+                2: {
+                    "abbreviation": "ANA"
+                },
+            }
+        ))
+        self.wheel.add(Cog(
+            name="ratings",
+            output=lambda: {
+                "2018-10-13": {
+                    1: {
                         "rating": 1507.5,
                         "gp": 1,
                         "diff": 7.5,
                     },
-                    "2018-10-14": {
-                        "rating": 1514.6764000042328,
-                        "gp": 2,
-                        "diff": 7.176400004232846,
-                    }
-                },
-                2: {
-                    "2018-10-13": {
+                    2: {
                         "rating": 1492.5,
                         "gp": 1,
                         "diff": -7.5,
                     },
-                    "2018-10-14": {
+                },
+                "2018-10-14": {
+                    1: {
+                        "rating": 1514.6764000042328,
+                        "gp": 2,
+                        "diff": 7.176400004232846,
+                    },
+                    2: {
                         "rating": 1485.3235999957672,
                         "gp": 2,
                         "diff": -7.176400004232846,
-                    }
+                    },
                 }
             }))
         self.wheel.add(RenderRatingsByDayCog(
             name="render",
-            inputs=["ratings"],
+            inputs=["ratings", "teams"],
         ))
 
         cog = Cog("check", inputs=["render"])

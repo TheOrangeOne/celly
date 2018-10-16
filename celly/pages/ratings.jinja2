@@ -1,17 +1,42 @@
 {% extends "template.jinja2" %}
 {% block title %}{{ date }}{% endblock %}
 {% block head %}
-    {{ super() }}
-    <style type="text/css">
-        .important { color: #336699; }
-    </style>
+<style>
+  .col {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .green {
+    color: green;
+  }
+  .red {
+    color: red;
+  }
+</style>
 {% endblock %}
 {% block content %}
-<ul>
-{% for update in rating_changes %}
-<li>
-  {{ update.id }}: {{ update.rating }} ({{ update.diff }})
-</li>
-{% endfor %}
-</ul>
+<h1>
+  <a href="{{ ratings_page(prev_ymd(date)) }}">←</a>
+  {{ date }}
+  <a href="{{ ratings_page(next_ymd(date)) }}">→</a>
+</h1>
+<table style='font-size: 1.1em; font-family: "Lucida Console", Monaco, monospace; line-height: 1.5; margin-left:auto; margin-right:auto;'>
+  <tbody>
+    {% for update in day_ratings %}
+    <tr>
+      <td class="col">
+        {{ update.abbr }}
+      </td>
+      <td class="col">
+        {{ format_rating(update.rating) }}
+      </td>
+      <td class="col">
+        <span class="{{ 'green' if update.diff > 0 else 'red' }}">
+        {{ format_diff(update.diff) }}
+        </span>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endblock %}
