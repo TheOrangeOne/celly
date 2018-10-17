@@ -77,7 +77,7 @@ API returns _nothing_ in the "dates" field.
 
 class ScheduleUpdateCog(Cog):
     DATE_F         = "%Y-%m-%d"
-    SEASON_START_F = "2018-10-04"
+    SEASON_START_F = "2018-10-03"
     SEASON_START   = datetime.strptime(SEASON_START_F, DATE_F)
 
     def _fetch_data(self, start, end):
@@ -132,6 +132,7 @@ class ScheduleUpdateCog(Cog):
         return game["status"]["abstractGameState"] == "Final"
 
     def _last_update(self, sched):
+        last_update_f = self.SEASON_START_F
         if len(sched):
             # check each of the day schedules to make sure they completed
             for day in sched:
@@ -154,7 +155,7 @@ class ScheduleUpdateCog(Cog):
         last_update = datetime.strptime(last_update_f, self.DATE_F)
 
         if last_update >= now:
-            return
+            return cached_sched
 
         new_sched_data = self._fetch_data(last_update_f, now_f)
         sched = self._merge_new_schedule(cached_sched, new_sched_data)

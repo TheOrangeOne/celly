@@ -14,7 +14,6 @@ class RatingModel:
             self.ratings[id] = {
                 "rating": ir,
                 "gp": 0,
-                "diff": 0.0,
             }
         self.IR = ir
         self.HF = hf
@@ -68,17 +67,11 @@ class RatingModel:
         hnr = self._update_rating(hr, hact, hexp, hgp)
         self.ratings[hid]["rating"] = hnr
         self.ratings[hid]["gp"] += 1
-        self.ratings[hid]["diff"] = hnr - hr
 
         agp = self.ratings[aid]["gp"]
         anr = self._update_rating(ar, aact, aexp, agp)
         self.ratings[aid]["rating"] = anr
         self.ratings[aid]["gp"] += 1
-        self.ratings[aid]["diff"] = anr - ar
-
-    def clear_diffs(self):
-        for id, data in self.ratings.items():
-            data["diff"] = 0.0
 
     def copyratings(self):
         return copy.deepcopy(self.ratings)

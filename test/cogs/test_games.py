@@ -44,7 +44,7 @@ class TestGamesCog(unittest.TestCase):
             }
         ])
 
-    def test_completed_regular_sesaon_games(self):
+    def test_completed_regular_season_games(self):
         self.wheel.add(Cog(
             name="currentseason",
             output=lambda: "20182019"
@@ -120,13 +120,9 @@ class TestGamesCog(unittest.TestCase):
                 }
             ]
         ))
-        self.wheel.add(GamesCog(
-            name="gamedata",
-            inputs=["sched"],
-        ))
         self.wheel.add(CompletedRegSeasonGamesCog(
             name="completedgames",
-            inputs=["currentseason", "gamedata"]
+            inputs=["currentseason", "sched"]
         ))
 
         cog = Cog("check", inputs=["completedgames"])

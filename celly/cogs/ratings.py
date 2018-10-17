@@ -25,9 +25,6 @@ class TeamRatingsByDayCog(Cog):
         model = RatingModel(teams)
         ratings_by_day = {}
         for date, games in days.items():
-            # clear out the diffs before each team for the day
-            model.clear_diffs()
-
             for game in games:
                 teams = game["teams"]
                 period = game["linescore"]["currentPeriod"]
@@ -40,14 +37,18 @@ class TeamRatingsByDayCog(Cog):
         return ratings_by_day
 
 
-def day_ratings(ratings, teams):
+def day_ratings(ratings, prev_ratings, teams):
     ratings_for_day = []
     for id, rating in ratings.items():
         abbr = get_id_abbr(teams, id)
+        prev_rating = prev_ratings.get(id, {
+            "rating": 1500.0,
+        })
+        diff = rating["rating"] - prev_rating["rating"]
         ratings_for_day.append(dict(
             abbr=abbr,
             rating=rating["rating"],
-            diff=rating["diff"],
+            diff=diff,
         ))
     ratings_for_day = sorted(
         ratings_for_day,
@@ -64,8 +65,9 @@ class RenderRatingsByDayCog(Cog):
     """
     def output(self, ratings_by_day, teams):
         pages = []
+        prev_ratings = {}
         for date, ratings in ratings_by_day.items():
-            ratings_for_day = day_ratings(ratings, teams)
+            ratings_for_day = day_ratings(ratings, prev_ratings, teams)
             temp = env.get_template("ratings.jinja2")
             r = temp.render(
                 date=date,
@@ -77,5 +79,6 @@ class RenderRatingsByDayCog(Cog):
                 src=r,
             )
             pages.append(page)
+            prev_ratings = ratings
 
         return pages

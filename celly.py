@@ -3,7 +3,7 @@ import os
 from celly.cog import Cog, PrintCog
 from celly.cogs.file import ReadJSONFileCog, WriteJSONFileCog, WriteFiles
 from celly.cogs.schedule import ScheduleUpdateCog
-from celly.cogs.games import GamesCog, CompletedRegSeasonGamesCog
+from celly.cogs.games import CompletedRegSeasonGamesCog
 from celly.cogs.ratings import TeamRatingsByDayCog, RenderRatingsByDayCog
 from celly.cogs.teams import TeamsCog
 from celly.cogwheel import CogWheel
@@ -61,15 +61,9 @@ wheel.add(ScheduleUpdateCog(
     inputs=["raw_sched_data"]
 ))
 
-wheel.add(GamesCog(
-    name="all_games",
-    inputs=["schedule"]
-))
-
-
 wheel.add(CompletedRegSeasonGamesCog(
     name="current_season_completed_games",
-    inputs=["current_season", "all_games"]
+    inputs=["current_season", "schedule"]
 ))
 
 wheel.add(TeamRatingsByDayCog(
@@ -97,8 +91,8 @@ wheel.add(WriteJSONFileCog(
     inputs=["sched_data_file", "schedule", "data_directory"]
 ))
 
-wheel.add(PrintCog(
-    inputs=[""]
-))
+# wheel.add(PrintCog(
+#     inputs=["current_season_completed_games"]
+# ))
 
 wheel.start()

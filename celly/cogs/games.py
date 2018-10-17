@@ -13,28 +13,32 @@ class GamesCog(Cog):
         for day in sched:
             if day["totalGames"] == 0:
                 continue
-            games += day["games"]
-
+            for game in day["games"]:
+                games.append(game)
         return games
 
 
 class CompletedRegSeasonGamesCog(Cog):
     """Cog for getting only completed games for the current season.
     """
-    def output(self, season, games):
+    def output(self, season_s, sched):
         def completed_reg_season(game):
-            s = game["season"] == season
+            s = game["season"] == season_s
             t = game["gameType"] == "R"
             c = game["status"]["abstractGameState"] == "Final"
             return s and t and c
 
-        games = list(filter(completed_reg_season, games))
-
         season = {}
-        for game in games:
-            date = game["gameDate"][0:10]
+        for day in sched:
+            date = day["date"]
             if date not in season:
                 season[date] = []
-            season[date].append(game)
+            if day["totalGames"] == 0:
+                continue
+
+            for game in day["games"]:
+                if not completed_reg_season(game):
+                    continue
+                season[date].append(game)
 
         return season
