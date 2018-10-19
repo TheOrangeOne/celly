@@ -1,16 +1,30 @@
 import os
 
 from celly.cog import Cog, PrintCog
-from celly.cogs.file import ReadJSONFileCog, WriteJSONFileCog, WriteFiles
-from celly.cogs.schedule import ScheduleUpdateCog
+from celly.cogs.file import (
+    FilterFilesDNECog,
+    ReadJSONFileCog,
+    WriteJSONFileCog,
+    WriteFilesCog,
+)
 from celly.cogs.games import CompletedRegSeasonGamesCog
-from celly.cogs.ratings import TeamRatingsByDayCog, RenderRatingsByDayCog
-from celly.cogs.teams import TeamsCog
+from celly.cogs.ratings import (
+    RenderRatingsByDayCog,
+    TeamRatingsByDayCog,
+)
+from celly.cogs.teams import (
+    TeamsCog,
+    TeamsGetSVGCog,
+    TeamsSVGCog,
+)
+from celly.cogs.schedule import ScheduleUpdateCog
 from celly.cogwheel import CogWheel
+
 
 CWD = os.getcwd()
 DATA_DIR = os.path.join(CWD, "data/")
 BUILD_DIR = os.path.join(CWD, "build/")
+
 
 wheel = CogWheel()
 
@@ -66,6 +80,10 @@ wheel.add(CompletedRegSeasonGamesCog(
     inputs=["current_season", "schedule"]
 ))
 
+
+"""
+Ratings Cogs
+"""
 wheel.add(TeamRatingsByDayCog(
     name="current_season_ratings_by_day",
     inputs=["current_season_completed_games", "teams"]
@@ -76,9 +94,40 @@ wheel.add(RenderRatingsByDayCog(
     inputs=["current_season_ratings_by_day", "teams"]
 ))
 
-wheel.add(WriteFiles(
+"""
+Team SVG Cogs
+"""
+
+wheel.add(TeamsSVGCog(
+    name="teams_svg_names",
+    inputs=["teams"]
+))
+
+wheel.add(FilterFilesDNECog(
+    name="missing_teams_svg_names",
+    inputs=["teams_svg_names", "build_directory"]
+))
+
+wheel.add(TeamsGetSVGCog(
+    name="teams_svgs",
+    inputs=["missing_teams_svg_names"]
+))
+
+
+
+"""
+File persistence Cogs
+"""
+wheel.add(WriteFilesCog(
     inputs=[
         "rendered_current_season_ratings",
+        "build_directory",
+    ]
+))
+
+wheel.add(WriteFilesCog(
+    inputs=[
+        "teams_svgs",
         "build_directory",
     ]
 ))

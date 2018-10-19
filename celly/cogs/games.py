@@ -13,8 +13,7 @@ class GamesCog(Cog):
         for day in sched:
             if day["totalGames"] == 0:
                 continue
-            for game in day["games"]:
-                games.append(game)
+            games += day["games"]
         return games
 
 

@@ -12,6 +12,11 @@
   .red {
     color: red;
   }
+  .logo {
+    width: 1.1em;
+    margin-right: 0.2em;
+    vertical-align: middle;
+  }
 </style>
 {% endblock %}
 {% block content %}
@@ -25,7 +30,9 @@
     {% for update in day_ratings %}
     <tr>
       <td class="col">
-        {{ update.abbr }}
+        <span>
+          <img class="logo" src="{{ update.svg }}"/><b>{{ update.abbr }}</b>
+        </span>
       </td>
       <td class="col">
         {{ format_rating(update.rating) }}

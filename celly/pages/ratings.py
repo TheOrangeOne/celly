@@ -1,5 +1,5 @@
 def format_rating(rating):
-    rating_f = "{:7.2f}".format(rating)
+    rating_f = "{:4.2f}".format(rating)
     return rating_f
 
 def format_diff(diff):

@@ -1,6 +1,6 @@
 from celly.date import next_ymd, prev_ymd
 from celly.cog import Cog
-from celly.cogs.teams import get_id_abbr
+from celly.cogs.teams import get_id_abbr, team_svg
 from celly.file import File
 from celly.pages import env
 from celly.pages.ratings import ratings_page
@@ -44,11 +44,14 @@ def day_ratings(ratings, prev_ratings, teams):
         prev_rating = prev_ratings.get(id, {
             "rating": 1500.0,
         })
-        diff = rating["rating"] - prev_rating["rating"]
+        nrating = normalize_rating(rating["rating"])
+        pnrating = normalize_rating(prev_rating["rating"])
+        diff = nrating - pnrating
         ratings_for_day.append(dict(
             abbr=abbr,
-            rating=rating["rating"],
             diff=diff,
+            rating=nrating,
+            svg=team_svg(id),
         ))
     ratings_for_day = sorted(
         ratings_for_day,

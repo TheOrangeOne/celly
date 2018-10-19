@@ -93,7 +93,19 @@ class ScheduleUpdateCog(Cog):
         if not new_sched_data or "dates" not in new_sched_data:
             return old_sched
         dates = new_sched_data["dates"]
-        return old_sched + dates
+
+        if not dates:
+            return old_sched
+
+        combined_sched = []
+        first_new_date = dates[0]["date"]
+        for date in old_sched:
+            if date["date"] == first_new_date:
+                return combined_sched + dates
+            else:
+                combined_sched.append(date)
+
+        return combined_sched + dates
 
     def _sanitize_schedule(self, sched, season_start, now):
         """Sanitizes the schedule data.
@@ -159,5 +171,7 @@ class ScheduleUpdateCog(Cog):
 
         new_sched_data = self._fetch_data(last_update_f, now_f)
         sched = self._merge_new_schedule(cached_sched, new_sched_data)
+        print(sched[-1])
         sched = self._sanitize_schedule(sched, self.SEASON_START, now)
+        print(sched[-1])
         return sched

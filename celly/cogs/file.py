@@ -28,9 +28,25 @@ class WriteJSONFileCog(Cog):
         return self.store_json(filename, data, directory)
 
 
-class WriteFiles(Cog):
+class WriteFilesCog(Cog):
     def output(self, files, directory):
         for file in files:
             path = os.path.join(directory, file.name)
-            with open(path, "w+") as f:
+            if type(file.src) is bytes:
+                mode = "wb+"
+            else:
+                mode = "w+"
+            with open(path, mode) as f:
                 f.write(file.src)
+
+
+class FilterFilesDNECog(Cog):
+    """
+    Input: list of file names and a directory
+    Output: list of files that don't exist
+    """
+    def output(self, files, directory):
+        return list(filter(
+            lambda f: not os.path.isfile(os.path.join(directory, f)),
+            files
+        ))

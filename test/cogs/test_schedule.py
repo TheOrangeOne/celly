@@ -104,10 +104,15 @@ class TestScheduleUpdateCog(unittest.TestCase):
             },
             {
                 "date": "2018-10-05",
+                "marker": 1,
             },
         ]
         new_data = {
             "dates": [
+                {
+                    "date": "2018-10-05",
+                    "marker": 2,
+                },
                 {
                     "date": "2018-10-06",
                 },
@@ -124,6 +129,7 @@ class TestScheduleUpdateCog(unittest.TestCase):
             },
             {
                 "date": "2018-10-05",
+                "marker": 2,
             },
             {
                 "date": "2018-10-06",
@@ -168,6 +174,47 @@ class TestScheduleUpdateCog(unittest.TestCase):
             },
         ]
 
+    def test_sanitize_schedule_missing_mid(self):
+        sched = [
+            {
+                "date": "2018-10-04",
+            },
+            {
+                "date": "2018-10-05",
+            },
+            # {
+            #     "date": "2018-10-06",
+            # },
+            {
+                "date": "2018-10-07",
+            },
+            {
+                "date": "2018-10-08",
+            },
+        ]
+        start = datetime.strptime("2018-10-04", "%Y-%m-%d")
+        end = datetime.strptime("2018-10-08", "%Y-%m-%d")
+        san_sched = self.cog._sanitize_schedule(sched, start, end)
+        assert san_sched == [
+            {
+                "date": "2018-10-04",
+            },
+            {
+                "date": "2018-10-05",
+            },
+            {
+                "date": "2018-10-06",
+                "totalGames": 0,
+                "games": [],
+            },
+            {
+                "date": "2018-10-07",
+            },
+            {
+                "date": "2018-10-08",
+            },
+        ]
+
     def test_sanitize_schedule_missing_end(self):
         sched = [
             {
@@ -200,5 +247,38 @@ class TestScheduleUpdateCog(unittest.TestCase):
                 "date": "2018-10-07",
                 "totalGames": 0,
                 "games": [],
+            },
+        ]
+
+    def test_sanitize_schedule_missing_none(self):
+        sched = [
+            {
+                "date": "2018-10-04",
+            },
+            {
+                "date": "2018-10-05",
+            },
+            {
+                "date": "2018-10-06",
+            },
+            {
+                "date": "2018-10-07",
+            },
+        ]
+        start = datetime.strptime("2018-10-04", "%Y-%m-%d")
+        end = datetime.strptime("2018-10-07", "%Y-%m-%d")
+        san_sched = self.cog._sanitize_schedule(sched, start, end)
+        assert san_sched == [
+            {
+                "date": "2018-10-04",
+            },
+            {
+                "date": "2018-10-05",
+            },
+            {
+                "date": "2018-10-06",
+            },
+            {
+                "date": "2018-10-07",
             },
         ]

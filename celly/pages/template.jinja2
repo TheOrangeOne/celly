@@ -17,23 +17,37 @@
     h1,h2,h3 {
       line-height:1.2;
     }
+    #footer {
+      /*position: fixed;*/
+      bottom: 0;
+      font-size: 11px;
+      text-align: center;
+    }
+    #content{
+      text-align: center;
+    }
+    #header{
+      text-align: center;
+    }
   </style>
 </head>
-<body style="text-align: center;">
+<body>
+  <div id="header">
     <span>
       <a href="today.html">today</a>
     </span>
     <span>
       <a href="ratings.html">ratings</a>
     </span>
-    <div id="content">
-        {% block content %}
-        {% endblock %}
-    </div>
-    <div id="footer">
-        {% block footer %}
-        generated at {{ now() }}
-        {% endblock %}
-    </div>
+  </div>
+  <div id="content">
+    {% block content %}
+    {% endblock %}
+  </div>
+  <div id="footer">
+    {% block footer %}
+    generated at {{ now }}
+    {% endblock %}
+  </div>
 </body>
 </html>

@@ -1,6 +1,7 @@
 from celly.cog import Cog
+from celly.file import File
 from celly.nhl import API
-from celly.web import get_json
+from celly.web import get, get_json
 
 
 
@@ -36,3 +37,38 @@ class TeamsCog(Cog):
         raw_teams = self.get_raw_teams()
         teams = self.get_teams(raw_teams)
         return teams
+
+
+class TeamsSVGCog(Cog):
+    """
+    Input: teams dict
+    Output: list of svg files for each team
+    """
+    def output(self, teams):
+        svgs = []
+        for id in teams:
+            svgs.append("{}.svg".format(id))
+        return svgs
+
+
+def team_svg(id):
+    return "{}.svg".format(id)
+
+
+class TeamsGetSVGCog(Cog):
+    """
+    Input: list of svg files to get
+    Output: list of svg files retrieved from NHL api
+    """
+    IMG_API_BASE = "https://www-league.nhlstatic.com/builds/si  te-core/86d4b76cc03a4d111ee0e20f9f62eb054eef3b74_1502985652/imag  es/logos/team/current/team-{}-dark.svg"
+    def output(self, files):
+        svgs = []
+        for filename in files:
+            id = filename.split('.')[0]
+            endpoint = self.IMG_API_BASE.format(id)
+            svg = get(endpoint)
+            svgs.append(File(
+                name=team_svg(id),
+                src=svg,
+            ))
+        return svgs
