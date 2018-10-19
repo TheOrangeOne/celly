@@ -171,7 +171,5 @@ class ScheduleUpdateCog(Cog):
 
         new_sched_data = self._fetch_data(last_update_f, now_f)
         sched = self._merge_new_schedule(cached_sched, new_sched_data)
-        print(sched[-1])
         sched = self._sanitize_schedule(sched, self.SEASON_START, now)
-        print(sched[-1])
         return sched
