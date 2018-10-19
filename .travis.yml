@@ -1,15 +1,17 @@
 language: python
 python:
-  - "3.6"
+- '3.6'
 sudo: false
 env:
   global:
   - secure: J0aCr0ugmD+KU3iPdafYcJrIuPM9rWH+kvdhjWFuC87pzgqdU06KUKLFcgpWmSCMqlqN00l6VlEV4dTP42dhFt/mRxb4TYT88Z5ektpnITn73GkhRhFC+07ju/GarUNgkT42jV7poyqtWmHzWAmLNKZGDfbJk22+iMu7YawrSNmxP6XswhFhhXhVrb+0E6EE2Zzp+jeXsywgQ0Lyy0p6ZBbqB9alQs5oy9wwId6iYysVyUVvKcfrVzKcA8hBFBFyx/4Co1aHXstXu9FOw3xk3aEGbOl1Rb94ky/LDj83flOMHZSekc7LGHjOwbkLzCv384LOHRSYu+elcrNWk4X6iPZgPElmudeMrzOWHVZoPD/qY92zppIzXhGaJF1J8k0MYbQrg1eqfrgZ/59pMiRk4OPuAcY+NU5sptJ1zk57KP1MyG+uPIMlzxH1cioFNVCHBI6JYDf77odrCO0SFJAYZi+e+pWGI1amOfBEFkA01NcbrRKnHRgFxGyVuiFtlrrIlzmZIYsRXcYSWD/FTTRKadbFQx/ZboyDSP4uIvyx5w8sIIomuRXDiIH9qP0rZ5Z5hX7bvF1qMGg4rdkjSQ/gtsTUuaMfsQKFygTufd5eITeyX5lpw3oUxQU+a8KQead+BK9OgnwngDWhXQ25h7jx2lW7YIuuBy0Gc0zAoDF1PgU=
+  matrix:
+    secure: rbPN8h8AT3yzTHWfTRY7UBgJ2Bktip+FU5ZCnGyigVPo2o0Ohfh8oE3ySJ4oCC7rbHWCUVMfxaClkg3SRVlkRUftlNK5o5kCGYm1OJjkoc2ALlSjn6H7+CQWZM6cJLHDiGNdohD/BEh/Bl6IFCtB1ao4PJIFAyjJfYVOTjJgHXjgJ0y3WQdLc7QPBd4jhbabCYjhlCbUIZGRtAWQvSXK70OIDSxTqRzaowA5cK0TAXCYnhKrirsrXHhB0XVkJn2/EKvvGHUuIejnKxBW9h8K5iiU71THTE8wa/+HSNUWQ9NxeTUJU6rTLruEJOWGQ5y7EOocag00WBXBFM0CUe+jd+ghue2WcLkqsnIUY1p3Ja2nzj7ckErs405Dd9di51d/g9scUSRJNmDEjYLLgywH4jDKhGCTPTeXGqh1wqaCHAv3ZQ90BcNE1rsMNivhQZLdVLHtUTko6aAl4bWnXjE+hjEbFiW0c/R9OvL7miM2OCMkNH2rR3a/0sMrEqTG30tF/4sIly3SQ5vLvUirFUR7X8BC3xXa0uUn7+nhbsZLIXLlPr/D8rFjGbxNnqyJCL4paPCyzIIimsG/6e8CT6V7Bu9PkA4XjMs0811ZIwDns8ayQBhj5AMuqQH13/CFrPxo9lT1Z0iXm74T9U3rENjlhaSOOeeS+H0REQgHm6oUnR0=
 before_install:
 - export TZ=America/Toronto
 cache:
   directories:
-    - data/
+  - data/
 script:
 - python3 -m unittest discover
 - python3 celly.py
@@ -20,7 +22,7 @@ deploy:
   provider: pages
   target-branch: gh-pages
   skip-cleanup: true
-  github-token: $GH_TOKEN
+  github-token: "$GH_TOKEN"
   keep-history: true
   local-dir: build
   on:
