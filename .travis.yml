@@ -2,5 +2,26 @@ language: python
 python:
   - "3.6"
 sudo: false
+env:
+  global:
+  - secure: J0aCr0ugmD+KU3iPdafYcJrIuPM9rWH+kvdhjWFuC87pzgqdU06KUKLFcgpWmSCMqlqN00l6VlEV4dTP42dhFt/mRxb4TYT88Z5ektpnITn73GkhRhFC+07ju/GarUNgkT42jV7poyqtWmHzWAmLNKZGDfbJk22+iMu7YawrSNmxP6XswhFhhXhVrb+0E6EE2Zzp+jeXsywgQ0Lyy0p6ZBbqB9alQs5oy9wwId6iYysVyUVvKcfrVzKcA8hBFBFyx/4Co1aHXstXu9FOw3xk3aEGbOl1Rb94ky/LDj83flOMHZSekc7LGHjOwbkLzCv384LOHRSYu+elcrNWk4X6iPZgPElmudeMrzOWHVZoPD/qY92zppIzXhGaJF1J8k0MYbQrg1eqfrgZ/59pMiRk4OPuAcY+NU5sptJ1zk57KP1MyG+uPIMlzxH1cioFNVCHBI6JYDf77odrCO0SFJAYZi+e+pWGI1amOfBEFkA01NcbrRKnHRgFxGyVuiFtlrrIlzmZIYsRXcYSWD/FTTRKadbFQx/ZboyDSP4uIvyx5w8sIIomuRXDiIH9qP0rZ5Z5hX7bvF1qMGg4rdkjSQ/gtsTUuaMfsQKFygTufd5eITeyX5lpw3oUxQU+a8KQead+BK9OgnwngDWhXQ25h7jx2lW7YIuuBy0Gc0zAoDF1PgU=
+before_install:
+- export TZ=America/Toronto
+cache:
+  directories:
+    - data/
 script:
 - python3 -m unittest discover
+- python3 celly.py
+- cp build/2018-10-19-ratings.html build/index.html
+deploy:
+  edge:
+    branch: v1.8.47
+  provider: pages
+  target-branch: gh-pages
+  skip-cleanup: true
+  github-token: $GH_TOKEN
+  keep-history: true
+  local-dir: build
+  on:
+    branch: master
