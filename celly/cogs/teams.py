@@ -4,7 +4,6 @@ from celly.nhl import API
 from celly.web import get, get_json
 
 
-
 def get_id_abbr(teams, id):
     return teams[id]["abbreviation"]
 

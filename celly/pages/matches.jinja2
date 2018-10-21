@@ -2,15 +2,10 @@
 {% block title %}{{ date }}{% endblock %}
 {% block head %}
 <style>
-  .col {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-  .green {
-    color: green;
-  }
-  .red {
-    color: red;
+  .logo {
+    width: 1.1em;
+    margin-right: 0.2em;
+    vertical-align: middle;
   }
 </style>
 {% endblock %}
@@ -30,20 +25,14 @@
 </h1>
 <table style='font-size: 1.1em; font-family: "Lucida Console", Monaco, monospace; line-height: 1.5; margin-left:auto; margin-right:auto;'>
   <tbody>
-    {% for update in day_ratings %}
+    {% for match in matches %}
     <tr>
       <td class="col">
+        <img class="logo" src="{{ match.away.svg }}"/>
         <span>
-          <img class="logo" src="{{ update.svg }}"/><b>{{ update.abbr }}</b>
+          at
         </span>
-      </td>
-      <td class="col">
-        {{ format_rating(update.rating) }}
-      </td>
-      <td class="col">
-        <span class="{{ 'green' if update.diff > 0 else 'red' }}">
-        {{ format_diff(update.diff) }}
-        </span>
+        <img class="logo" src="{{ match.home.svg }}"/>
       </td>
     </tr>
     {% endfor %}

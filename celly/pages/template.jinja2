@@ -29,15 +29,20 @@
     #header{
       text-align: center;
     }
+    .logo {
+      width: 1.1em;
+      margin-right: 0.2em;
+      vertical-align: middle;
+    }
   </style>
 </head>
 <body>
   <div id="header">
     <span>
-      <a href="today.html">today</a>
+      <a href="{{ match_page(nowf) }}">today</a>
     </span>
     <span>
-      <a href="ratings.html">ratings</a>
+      <a href="{{ ratings_page(nowf) }}">ratings</a>
     </span>
   </div>
   <div id="content">
@@ -46,7 +51,7 @@
   </div>
   <div id="footer">
     {% block footer %}
-    generated at {{ now }}
+    generated {{ now }}
     {% endblock %}
   </div>
 </body>

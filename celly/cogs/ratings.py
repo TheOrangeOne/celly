@@ -69,13 +69,19 @@ class RenderRatingsByDayCog(Cog):
     def output(self, ratings_by_day, teams):
         pages = []
         prev_ratings = {}
+        temp = env.get_template("ratings.jinja2")
+
+        def get_page(date):
+            return ratings_page(date) if date in ratings_by_day else ''
+
         for date, ratings in ratings_by_day.items():
             ratings_for_day = day_ratings(ratings, prev_ratings, teams)
-            temp = env.get_template("ratings.jinja2")
             r = temp.render(
                 date=date,
                 teams=teams,
                 day_ratings=ratings_for_day,
+                next_page=get_page(next_ymd(date)),
+                prev_page=get_page(prev_ymd(date)),
             )
             page = File(
                 name=ratings_page(date),
