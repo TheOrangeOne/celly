@@ -7,6 +7,18 @@ from celly.file import File
 from celly.pages import env
 from celly.pages.matches import match_page
 
+def get_scoreline(game):
+    teams = game["teams"]
+    period = game["linescore"]["currentPeriod"]
+    if period == 4:
+        period = "OT"
+    elif period == 5:
+        period = "SO"
+    else:
+        period = "RG"
+
+    return "{}-{} {}".format(teams["away"]["score"], teams["home"]["score"], period)
+
 
 def get_match(game, teams):
     home = dict(game["teams"]["home"]["team"])
@@ -23,10 +35,16 @@ def get_match(game, teams):
     date = datetime.strptime(game_date, "%Y-%m-%dT%H:%M:%SZ")
     date = date.strftime("%H:%M")
 
+    if game["status"]["abstractGameState"] == "Final":
+        score = get_scoreline(game)
+    else:
+        score = ""
+
     return dict(
         home=home,
         away=away,
         date=date,
+        scoreline=score,
     )
 
 
@@ -52,7 +70,6 @@ class RenderDayMatchesCog(Cog):
             for game in day["games"]:
                 if game["gameType"] != "R":
                     continue
-
                 matches.append(get_match(game, teams))
 
             r = temp.render(

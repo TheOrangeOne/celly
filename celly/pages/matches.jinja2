@@ -23,6 +23,11 @@
   →
   {% endif %}
 </h1>
+<h2>
+  <a href="{{ ratings_page(date) }}">
+    ratings
+  </a>
+</h2>
 <table style='font-size: 1.1em; font-family: "Lucida Console", Monaco, monospace; line-height: 1.5; margin-left:auto; margin-right:auto;'>
   <tbody>
     {% for match in matches %}
@@ -33,6 +38,11 @@
           at
         </span>
         <img class="logo" src="{{ match.home.svg }}"/>
+        {% if match.scoreline %}
+        {{ match.scoreline }}
+        {% else %}
+        {{ match.date }}
+        {% endif %}
       </td>
     </tr>
     {% endfor %}
