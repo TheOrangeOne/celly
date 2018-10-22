@@ -53,7 +53,7 @@ class RenderDayMatchesCog(Cog):
     Output: list of File representing rendered day matches
     """
 
-    def output(self, sched, teams, ratings):
+    def output(self, sched, teams):
         days = []
         temp = env.get_template("matches.jinja2")
         dates = [day["date"] for day in sched]

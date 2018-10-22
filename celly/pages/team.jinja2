@@ -2,16 +2,23 @@
 {% block title %}{{ date }}{% endblock %}
 {% block head %}
 <style>
+  .imgbox {
+    display: grid;
+    height: 100%;
+  }
+  .center-fit {
+    max-width: 100%;
+    max-height: 100vh;
+    margin: auto;
+  }
 </style>
 {% endblock %}
 {% block content %}
 <h1>
   {{ team.name }}
 </h1>
-<div>
-<table>
-</table>
-<img src="{{ img_src }}"></img>
-<img src="{{ graph_src }}"></img>
+<div class="imgbox">
+  <img class="center-fit" src="{{ img_src }}"></img>
+  <img class="center-fit" src="{{ graph_src }}"></img>
 </div>
 {% endblock %}

@@ -28,6 +28,7 @@
   {% endif %}
 </h1>
 <h2>
+  <a href="{{ digest_page(date) }}">digest</a>
   <b>games</b>
   <a href="{{ ratings_page(date) }}">ratings</a>
 </h2>
@@ -43,7 +44,6 @@
         <td class="col">
           {{ match.away.score }}-{{ match.home.score }}
         </td>
-        {{ WTF }}
         <td class="col">
           <a href="{{ team_page(match.home.abbr) }}">{{ match.home.abbr }}</a>
           <img class="logo" src="{{ match.home.svg }}"/>

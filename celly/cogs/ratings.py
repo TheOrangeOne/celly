@@ -61,7 +61,7 @@ def day_ratings(ratings, prev_ratings, teams):
     return ratings_for_day
 
 
-class RenderRatingsByDayCog(Cog):
+class RenderDayRatingsCog(Cog):
     """
     Input: RatingsByDay data
     Output: list of File for each day

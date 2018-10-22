@@ -1,0 +1,48 @@
+{% extends "template.jinja2" %}
+{% block title %}{{ date }}{% endblock %}
+{% block head %}
+<style>
+  .col {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  .reddit {
+    font-size: 12px;
+    text-align: left !important;
+  }
+</style>
+{% endblock %}
+{% block content %}
+<h1>
+  {% if prev_page %}
+  <a href="{{ prev_page }}">←</a>
+  {% else %}
+  ←
+  {% endif %}
+  {{ date }}
+  {% if next_page %}
+  <a href="{{ next_page }}">→</a>
+  {% else %}
+  →
+  {% endif %}
+</h1>
+<h2>
+  <b>digest</b>
+  <a href="{{ match_page(date) }}">games</a>
+  <a href="{{ ratings_page(date) }}">ratings</a>
+</h2>
+<h3>reddit</h3>
+<div class="reddit">
+  {% for post in reddit_top %}
+  <ul>
+    <li>
+      <a href="{{ post.data.url }}">{{ post.data.title }}</a> | <a href="{{ "https://old.reddit.com%s"%post.data.permalink }}">comments</a>
+    </li>
+  </ul>
+  {% endfor %}
+</div>
+<h3>leaders</h3>
+<h3>hot teams</h3>
+<h3>what to watch</h3>
+<h3>thg</h3>
+{% endblock %}

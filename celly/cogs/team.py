@@ -9,7 +9,7 @@ from celly.cogs.teams import team_svg
 
 
 def team_rating_graph_file(id):
-    return "{}_rating.png".format(id)
+    return "{}_rating.svg".format(id)
 
 
 # TODO: move this to a Cog

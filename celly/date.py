@@ -1,7 +1,9 @@
 from datetime import datetime, timedelta
 
-
 FMT = "%Y-%m-%d"
+
+NOW = datetime.now()
+DATE_F = NOW.strftime(FMT)
 
 def ymd_add_n_days(ymd, n):
     date = datetime.strptime(ymd, FMT)

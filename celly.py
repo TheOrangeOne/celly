@@ -1,6 +1,7 @@
 import os
 
 from celly.cog import Cog, PrintCog
+from celly.cogs.digest import RenderDayDigestCog
 from celly.cogs.file import (
     FilterFilesDNECog,
     ReadJSONFileCog,
@@ -10,8 +11,11 @@ from celly.cogs.file import (
 from celly.cogs.games import CompletedRegSeasonGamesCog
 from celly.cogs.matches import RenderDayMatchesCog
 from celly.cogs.ratings import (
-    RenderRatingsByDayCog,
+    RenderDayRatingsCog,
     TeamRatingsByDayCog,
+)
+from celly.cogs.reddit import (
+    RedditUpdateTopCog,
 )
 from celly.cogs.team import TeamRenderCog
 from celly.cogs.teams import (
@@ -21,6 +25,7 @@ from celly.cogs.teams import (
 )
 from celly.cogs.schedule import ScheduleUpdateCog
 from celly.cogwheel import CogWheel
+from celly.date import DATE_F
 
 
 CWD = os.getcwd()
@@ -29,6 +34,11 @@ BUILD_DIR = os.path.join(CWD, "build/")
 
 
 wheel = CogWheel()
+
+wheel.add(Cog(
+    name="date_f",
+    output=lambda: DATE_F,
+))
 
 wheel.add(Cog(
     name="current_season",
@@ -55,6 +65,11 @@ wheel.add(Cog(
     output=lambda: "teams.json",
 ))
 
+wheel.add(Cog(
+    name="reddit_top_data_file",
+    output=lambda: "reddit_top.json",
+))
+
 
 wheel.add(ReadJSONFileCog(
     name="raw_sched_data",
@@ -64,6 +79,16 @@ wheel.add(ReadJSONFileCog(
 wheel.add(ReadJSONFileCog(
     name="raw_teams_data",
     inputs=["teams_data_file", "data_directory"]
+))
+
+wheel.add(ReadJSONFileCog(
+    name="raw_reddit_top",
+    inputs=["reddit_top_data_file", "data_directory"]
+))
+
+wheel.add(RedditUpdateTopCog(
+    name="reddit_top_by_date",
+    inputs=["raw_reddit_top", "date_f"]
 ))
 
 wheel.add(TeamsCog(
@@ -87,7 +112,15 @@ Match cogs
 """
 wheel.add(RenderDayMatchesCog(
     name="match_pages",
-    inputs=["schedule", "teams", "current_season_ratings_by_day"]
+    inputs=["schedule", "teams"]
+))
+
+"""
+Digest cogs
+"""
+wheel.add(RenderDayDigestCog(
+    name="digest_pages",
+    inputs=["schedule", "reddit_top_by_date"]
 ))
 
 
@@ -99,7 +132,7 @@ wheel.add(TeamRatingsByDayCog(
     inputs=["current_season_completed_games", "teams"]
 ))
 
-wheel.add(RenderRatingsByDayCog(
+wheel.add(RenderDayRatingsCog(
     name="current_season_ratings_pages",
     inputs=["current_season_ratings_by_day", "teams"]
 ))
@@ -156,21 +189,45 @@ wheel.add(WriteFilesCog(
 
 wheel.add(WriteFilesCog(
     inputs=[
+        "digest_pages",
+        "build_directory",
+    ]
+))
+
+wheel.add(WriteFilesCog(
+    inputs=[
         "teams_svgs",
         "build_directory",
     ]
 ))
 
+
 wheel.add(WriteJSONFileCog(
-    inputs=["teams_data_file", "teams", "data_directory"]
+    inputs=[
+        "teams_data_file",
+        "teams",
+        "data_directory",
+    ]
 ))
 
 wheel.add(WriteJSONFileCog(
-    inputs=["sched_data_file", "schedule", "data_directory"]
+    inputs=[
+        "sched_data_file",
+        "schedule",
+        "data_directory"
+    ]
 ))
 
-# wheel.add(PrintCog(
-#     inputs=["current_season_completed_games"]
-# ))
+wheel.add(WriteJSONFileCog(
+    inputs=[
+        "reddit_top_data_file",
+        "reddit_top_by_date",
+        "data_directory",
+    ]
+))
+
+wheel.add(PrintCog(
+    inputs=[""]
+))
 
 wheel.start()
