@@ -19,7 +19,7 @@ def get_match(game, teams):
     aid = away["id"]
     game_date = game["gameDate"]
 
-    hscore, ascore = get_scores(game)
+    ascore, hscore = get_scores(game)
     home["abbr"] = get_id_abbr(teams, hid)
     home["svg"] = team_svg(hid)
     home["score"] = hscore
@@ -53,7 +53,7 @@ class RenderDayMatchesCog(Cog):
     Output: list of File representing rendered day matches
     """
 
-    def output(self, sched, teams):
+    def output(self, sched, teams, ratings):
         days = []
         temp = env.get_template("matches.jinja2")
         dates = [day["date"] for day in sched]

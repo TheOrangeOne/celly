@@ -87,7 +87,7 @@ Match cogs
 """
 wheel.add(RenderDayMatchesCog(
     name="match_pages",
-    inputs=["schedule", "teams"]
+    inputs=["schedule", "teams", "current_season_ratings_by_day"]
 ))
 
 
