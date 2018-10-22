@@ -1,0 +1,17 @@
+{% extends "template.jinja2" %}
+{% block title %}{{ date }}{% endblock %}
+{% block head %}
+<style>
+</style>
+{% endblock %}
+{% block content %}
+<h1>
+  {{ team.name }}
+</h1>
+<div>
+<table>
+</table>
+<img src="{{ img_src }}"></img>
+<img src="{{ graph_src }}"></img>
+</div>
+{% endblock %}

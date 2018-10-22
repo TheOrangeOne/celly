@@ -51,7 +51,7 @@ class TeamsSVGCog(Cog):
 
 
 def team_svg(id):
-    return "{}.svg".format(id)
+    return "{}.png".format(id)
 
 
 class TeamsGetSVGCog(Cog):

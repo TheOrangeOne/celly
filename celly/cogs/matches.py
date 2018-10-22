@@ -7,17 +7,9 @@ from celly.file import File
 from celly.pages import env
 from celly.pages.matches import match_page
 
-def get_scoreline(game):
+def get_scores(game):
     teams = game["teams"]
-    period = game["linescore"]["currentPeriod"]
-    if period == 4:
-        period = "OT"
-    elif period == 5:
-        period = "SO"
-    else:
-        period = "RG"
-
-    return "{}-{} {}".format(teams["away"]["score"], teams["home"]["score"], period)
+    return teams["away"]["score"], teams["home"]["score"]
 
 
 def get_match(game, teams):
@@ -27,24 +19,31 @@ def get_match(game, teams):
     aid = away["id"]
     game_date = game["gameDate"]
 
+    hscore, ascore = get_scores(game)
     home["abbr"] = get_id_abbr(teams, hid)
     home["svg"] = team_svg(hid)
+    home["score"] = hscore
     away["abbr"] = get_id_abbr(teams, aid)
     away["svg"] = team_svg(aid)
+    away["score"] = ascore
+
+    period = game["linescore"]["currentPeriod"]
+    if period == 4:
+        period = "OT"
+    elif period == 5:
+        period = "SO"
+    else:
+        period = "RG"
 
     date = datetime.strptime(game_date, "%Y-%m-%dT%H:%M:%SZ")
     date = date.strftime("%H:%M")
 
-    if game["status"]["abstractGameState"] == "Final":
-        score = get_scoreline(game)
-    else:
-        score = ""
-
     return dict(
+        done=game["status"]["abstractGameState"] == "Final",
         home=home,
         away=away,
         date=date,
-        scoreline=score,
+        period=period,
     )
 
 

@@ -13,6 +13,7 @@ from celly.cogs.ratings import (
     RenderRatingsByDayCog,
     TeamRatingsByDayCog,
 )
+from celly.cogs.team import TeamRenderCog
 from celly.cogs.teams import (
     TeamsCog,
     TeamsGetSVGCog,
@@ -85,7 +86,7 @@ wheel.add(CompletedRegSeasonGamesCog(
 Match cogs
 """
 wheel.add(RenderDayMatchesCog(
-    name="rendered_match_pages",
+    name="match_pages",
     inputs=["schedule", "teams"]
 ))
 
@@ -99,7 +100,7 @@ wheel.add(TeamRatingsByDayCog(
 ))
 
 wheel.add(RenderRatingsByDayCog(
-    name="rendered_current_season_ratings",
+    name="current_season_ratings_pages",
     inputs=["current_season_ratings_by_day", "teams"]
 ))
 
@@ -122,6 +123,11 @@ wheel.add(TeamsGetSVGCog(
     inputs=["missing_teams_svg_names"]
 ))
 
+wheel.add(TeamRenderCog(
+    name="team_pages",
+    inputs=["teams", "current_season_ratings_by_day"]
+))
+
 
 
 """
@@ -129,14 +135,21 @@ File persistence Cogs
 """
 wheel.add(WriteFilesCog(
     inputs=[
-        "rendered_current_season_ratings",
+        "current_season_ratings_pages",
         "build_directory",
     ]
 ))
 
 wheel.add(WriteFilesCog(
     inputs=[
-        "rendered_match_pages",
+        "match_pages",
+        "build_directory",
+    ]
+))
+
+wheel.add(WriteFilesCog(
+    inputs=[
+        "team_pages",
         "build_directory",
     ]
 ))

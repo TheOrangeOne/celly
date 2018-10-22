@@ -6,12 +6,6 @@
     padding-left: 5px;
     padding-right: 5px;
   }
-  .green {
-    color: green;
-  }
-  .red {
-    color: red;
-  }
 </style>
 {% endblock %}
 {% block content %}
@@ -39,7 +33,7 @@
     <tr>
       <td class="col">
         <span>
-          <img class="logo" src="{{ update.svg }}"/><b>{{ update.abbr }}</b>
+          <img class="logo" src="{{ update.svg }}"/><a href="{{ team_page(update.abbr) }}">{{ update.abbr }}</a>
         </span>
       </td>
       <td class="col">

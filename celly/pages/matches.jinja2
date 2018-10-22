@@ -33,15 +33,21 @@
     {% for match in matches %}
     <tr>
       <td class="col">
-        <img class="logo" src="{{ match.away.svg }}"/>
-        <span>
-          at
-        </span>
-        <img class="logo" src="{{ match.home.svg }}"/>
-        {% if match.scoreline %}
-        {{ match.scoreline }}
+        {% if match.done %}
+          <img class="logo" src="{{ match.away.svg }}"/>
+          <a href="{{ team_page(match.away.abbr) }}">{{ match.away.abbr }}</a>
+          {{ match.away.score }}
+          -
+          {{ match.home.score }}
+          <a href="{{ team_page(match.home.abbr) }}">{{ match.home.abbr }}</a>
+          <img class="logo" src="{{ match.home.svg }}"/>
         {% else %}
-        {{ match.date }}
+          <img class="logo" src="{{ match.away.svg }}"/>{{ match.away.abbr }}
+          <span>
+            at
+          </span>
+          {{ match.home.abbr }}<img class="logo" src="{{ match.home.svg }}"/>
+          {{ match.date }}
         {% endif %}
       </td>
     </tr>
