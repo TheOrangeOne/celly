@@ -6,10 +6,22 @@
     padding-left: 5px;
     padding-right: 5px;
   }
-  .logo {
-    width: 1.1em;
+  .matchup-logo {
+    width: 3.0em;
     margin-right: 0.2em;
     vertical-align: middle;
+  }
+  .teamabbr {
+    margin: 0;
+  }
+  .score {
+    font-weight: bold;
+  }
+  .fin-team-container {
+    margin-top: 0.5em;
+  }
+  .trend {
+    width: 50px;
   }
 </style>
 {% endblock %}
@@ -32,36 +44,88 @@
   <b>games</b>
   <a href="{{ ratings_page(date) }}">ratings</a>
 </h2>
-<table style='font-size: 1.1em; font-family: "Lucida Console", Monaco, monospace; line-height: 1.5; margin-left:auto; margin-right:auto;'>
+<table style='font-size: 1.0em; font-family: "Lucida Console", Monaco, monospace; line-height: 1.5; margin-left:auto; margin-right:auto;'>
   <tbody>
     {% for match in matches %}
-    <tr>
+    <tr style="outline: thin solid;">
       {% if match.done %}
-        <td class="col">
-          <img class="logo" src="{{ match.away.svg }}"/>
-          <a href="{{ team_page(match.away.abbr) }}">{{ match.away.abbr }}</a>
+        <td class="col" style="overflow:hidden;">
+          <div class="fin-team-container" style="float:left;">
+            <a href="{{ team_page(match.away.abbr) }}">
+              <img class="matchup-logo" src="{{ match.away.svg }}"/>
+              <p class="teamabbr">
+                {{ match.away.abbr }}
+              </p>
+            </a>
+          </div>
+          <div style="float: left;">
+            <span class="score">{{ match.away.score }}</span><br>
+            {{ match.away.shots }}<br>
+            {{ match.away.w }}-{{ match.away.l }}-{{ match.away.otl }}<br>
+            {{ format_diff(match.away.diff) }}<br>
+          </div>
+          <div style="float: left; margin-left: 1em; margin-right: 1em;">
+            score<br>
+            shots<br>
+            rec.<br>
+            rΔ<br>
+          </div>
+          <div style="float: left;">
+            <span class="score">{{ match.home.score }}</span><br>
+            {{ match.home.shots }}<br>
+            {{ match.home.w }}-{{ match.home.l }}-{{ match.home.otl }}<br>
+            {{ format_diff(match.home.diff) }}<br>
+          </div>
+          <div class="fin-team-container"  style="float: left;">
+            <a href="{{ team_page(match.home.abbr) }}">
+              <img class="matchup-logo" src="{{ match.home.svg }}"/>
+              <p class="teamabbr">
+                {{ match.home.abbr }}
+              </p>
+            </a>
+          </div>
         </td>
-        <td class="col">
-          {{ match.away.score }}-{{ match.home.score }}
-        </td>
-        <td class="col">
-          <a href="{{ team_page(match.home.abbr) }}">{{ match.home.abbr }}</a>
-          <img class="logo" src="{{ match.home.svg }}"/>
-        </td>
+
       {% else %}
-        <td class="col">
-          <img class="logo" src="{{ match.away.svg }}"/>
-          <a href="{{ team_page(match.away.abbr) }}">{{ match.away.abbr }}</a>
-          <span>
-            at
-          </span>
-          <a href="{{ team_page(match.home.abbr) }}">{{ match.home.abbr }}</a>
-          <img class="logo" src="{{ match.home.svg }}"/>
-          {{ match.date }}
+        <td class="col" style="overflow:hidden;">
+          <div class="team-container" style="float:left;">
+            <a href="{{ team_page(match.away.abbr) }}">
+              <img class="matchup-logo" src="{{ match.away.svg }}"/>
+              <p class="teamabbr">
+                {{ match.away.abbr }}
+              </p>
+            </a>
+          </div>
+          <div style="float: left;">
+            {{ match.away.w }}-{{ match.away.l }}-{{ match.away.otl }}<br>
+            {{ format_rating(match.away.rating) }}<br>
+            <img class="trend" src="{{ team_rating_graph(match.away.id) }}"></img><br>
+          </div>
+          <div style="float: left; margin-left: 1em; margin-right: 1em;">
+            rec.<br>
+            r.<br>
+            trend<br>
+          </div>
+          <div style="float: left;">
+            {{ match.home.w }}-{{ match.home.l }}-{{ match.home.otl }}<br>
+            {{ format_rating(match.home.rating) }}<br>
+            <img class="trend" src="{{ team_rating_graph(match.home.id) }}"></img><br>
+          </div>
+          <div class="team-container" style="float: left;">
+            <a href="{{ team_page(match.home.abbr) }}">
+              <img class="matchup-logo" src="{{ match.home.svg }}"/>
+              <p class="teamabbr">
+                {{ match.home.abbr }}
+              </p>
+            </a>
+          </div>
         </td>
       {% endif %}
     </tr>
     {% endfor %}
   </tbody>
 </table>
+{% if not matches %}
+HOW CAN THERE BE A DAY WITHOUT HOCKEY
+{% endif %}
 {% endblock %}

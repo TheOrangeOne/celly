@@ -1,15 +1,11 @@
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 from celly.cog import Cog
 from celly.file import File
 from celly.rating import normalize_rating
 from celly.pages import env
-from celly.pages.team import team_page
+from celly.pages.team import team_page, team_rating_graph
 from celly.cogs.teams import team_svg
-
-
-def team_rating_graph_file(id):
-    return "{}_rating.svg".format(id)
 
 
 # TODO: move this to a Cog
@@ -24,7 +20,10 @@ def team_ratings(id, ratings):
         r = normalize_rating(team_rating["rating"])
         team_ratings.append(r)
     plt.plot(dates, team_ratings, 'ro-',  label='line 2')
-    plt.savefig("build/{}".format(team_rating_graph_file(id)))
+    plt.savefig(
+        "build/{}".format(team_rating_graph(id)),
+        bbox_inches = "tight"
+    )
     plt.clf()
 
 
@@ -34,12 +33,12 @@ class TeamRenderCog(Cog):
 
         team_pages = []
         for id, team in teams.items():
-            team_ratings(id, ratings)
+            # team_ratings(id, ratings)
             abbr = team["abbreviation"]
             r = temp.render(
                 team=team,
                 img_src=team_svg(id),
-                graph_src="{}".format(team_rating_graph_file(id)),
+                graph_src=team_rating_graph(id),
             )
             page = File(
                 name=team_page(abbr),

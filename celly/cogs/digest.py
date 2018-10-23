@@ -27,6 +27,8 @@ class RenderDayDigestCog(Cog):
             date = day["date"]
 
             reddit_top_day = reddit_top.get(date, [])
+            if len(reddit_top_day) > 5:
+                reddit_top_day = reddit_top_day[0:5]
 
             r = temp.render(
                 date=date,

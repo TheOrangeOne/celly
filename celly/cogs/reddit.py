@@ -30,7 +30,7 @@ class RedditUpdateTopCog(Cog):
         if date in cached:
             return cached
 
-        new_top = self.get_top_for_day(10)
+        new_top = self.get_top_for_day(20)
         if new_top:
             top = self.merge_new(cached, new_top, date)
             return top

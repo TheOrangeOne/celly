@@ -6,13 +6,15 @@ from celly.date import next_ymd, prev_ymd
 from celly.file import File
 from celly.pages import env
 from celly.pages.matches import match_page
+from celly.rating import normalize_rating
+
 
 def get_scores(game):
     teams = game["teams"]
     return teams["away"]["score"], teams["home"]["score"]
 
 
-def get_match(game, teams):
+def get_match(game, teams, ratings, diffs):
     home = dict(game["teams"]["home"]["team"])
     hid = home["id"]
     away = dict(game["teams"]["away"]["team"])
@@ -23,9 +25,21 @@ def get_match(game, teams):
     home["abbr"] = get_id_abbr(teams, hid)
     home["svg"] = team_svg(hid)
     home["score"] = hscore
+    home["shots"] = game["linescore"]["teams"]["home"]["shotsOnGoal"]
+    home["w"] = game["teams"]["home"]["leagueRecord"]["wins"]
+    home["l"] = game["teams"]["home"]["leagueRecord"]["losses"]
+    home["otl"] = game["teams"]["home"]["leagueRecord"]["ot"]
+    home["diff"] = diffs[hid]
+    home["rating"] = normalize_rating(ratings[hid]["rating"])
     away["abbr"] = get_id_abbr(teams, aid)
     away["svg"] = team_svg(aid)
     away["score"] = ascore
+    away["shots"] = game["linescore"]["teams"]["away"]["shotsOnGoal"]
+    away["w"] = game["teams"]["away"]["leagueRecord"]["wins"]
+    away["l"] = game["teams"]["away"]["leagueRecord"]["losses"]
+    away["otl"] = game["teams"]["away"]["leagueRecord"]["ot"]
+    away["diff"] = diffs[aid]
+    away["rating"] = normalize_rating(ratings[aid]["rating"])
 
     period = game["linescore"]["currentPeriod"]
     if period == 4:
@@ -53,7 +67,7 @@ class RenderDayMatchesCog(Cog):
     Output: list of File representing rendered day matches
     """
 
-    def output(self, sched, teams):
+    def output(self, sched, teams, ratings, diffs):
         days = []
         temp = env.get_template("matches.jinja2")
         dates = [day["date"] for day in sched]
@@ -69,7 +83,7 @@ class RenderDayMatchesCog(Cog):
             for game in day["games"]:
                 if game["gameType"] != "R":
                     continue
-                matches.append(get_match(game, teams))
+                matches.append(get_match(game, teams, ratings[date], diffs[date]))
 
             r = temp.render(
                 date=date,

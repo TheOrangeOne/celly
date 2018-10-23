@@ -37,6 +37,27 @@ class TeamRatingsByDayCog(Cog):
         return ratings_by_day
 
 
+class TeamDiffsByDayCog(Cog):
+    """
+    Input: ratings by day
+
+    Output: rating diff by day
+    """
+    def output(self, ratings):
+        diffs = {}
+        for date, day_ratings in ratings.items():
+            prev_date = prev_ymd(date)
+            prev_day_ratings = ratings.get(prev_date, {})
+            diffs[date] = {}
+            for tid, rating in day_ratings.items():
+                prev_rating = prev_day_ratings.get(tid, {})
+                nr = normalize_rating(rating["rating"])
+                pnr = normalize_rating(prev_rating.get("rating", 1500.0))
+                diff = nr - pnr
+                diffs[date][tid] = diff
+        return diffs
+
+
 def day_ratings(ratings, prev_ratings, teams):
     ratings_for_day = []
     for id, rating in ratings.items():

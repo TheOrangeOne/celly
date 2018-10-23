@@ -13,6 +13,7 @@ from celly.cogs.games import CompletedRegSeasonGamesCog
 from celly.cogs.matches import RenderDayMatchesCog
 from celly.cogs.ratings import (
     RenderDayRatingsCog,
+    TeamDiffsByDayCog,
     TeamRatingsByDayCog,
 )
 from celly.cogs.reddit import (
@@ -114,7 +115,12 @@ Match cogs
 """
 wheel.add(RenderDayMatchesCog(
     name="match_pages",
-    inputs=["schedule", "teams"]
+    inputs=[
+        "schedule",
+        "teams",
+        "current_season_ratings_by_day",
+        "current_season_diffs_by_day",
+    ]
 ))
 
 """
@@ -132,6 +138,11 @@ Ratings cogs
 wheel.add(TeamRatingsByDayCog(
     name="current_season_ratings_by_day",
     inputs=["current_season_completed_games", "teams"]
+))
+
+wheel.add(TeamDiffsByDayCog(
+    name="current_season_diffs_by_day",
+    inputs=["current_season_ratings_by_day"]
 ))
 
 wheel.add(RenderDayRatingsCog(
