@@ -1,3 +1,4 @@
+import logging
 import os
 
 from celly.cog import Cog, PrintCog
@@ -27,6 +28,7 @@ from celly.cogs.schedule import ScheduleUpdateCog
 from celly.cogwheel import CogWheel
 from celly.date import DATE_F
 
+logging.basicConfig(level=logging.INFO)
 
 CWD = os.getcwd()
 DATA_DIR = os.path.join(CWD, "data/")

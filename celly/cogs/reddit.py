@@ -1,15 +1,24 @@
 import copy
+import logging
 
 from celly.cog import Cog
-from celly.web import get_json
+from celly.web import get_reddit
+
+
+log = logging.getLogger(__name__)
 
 
 class RedditUpdateTopCog(Cog):
-    API = "https://reddit.com/r/hockey/top/.json?count={}"
+    API = "r/hockey/top/.json?count={}"
 
     def get_top_for_day(self, num):
         url = self.API.format(num)
-        return get_json(url)
+        try:
+            top = get_reddit(url)
+        except Exception:
+            top = None
+            log.error("failed to get reddit top posts")
+        return top
 
     def merge_new(self, cached, new, date):
         merged = copy.deepcopy(cached)
@@ -22,5 +31,7 @@ class RedditUpdateTopCog(Cog):
             return cached
 
         new_top = self.get_top_for_day(10)
-        top = self.merge_new(cached, new_top, date)
-        return top
+        if new_top:
+            top = self.merge_new(cached, new_top, date)
+            return top
+        return cached
