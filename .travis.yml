@@ -10,6 +10,7 @@ env:
 before_install:
 - export TZ=America/Toronto
 cache:
+  pip
   directories:
   - data/
   - build/
