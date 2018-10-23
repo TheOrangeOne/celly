@@ -10,10 +10,10 @@ env:
 before_install:
 - export TZ=America/Toronto
 cache:
-  pip
   directories:
   - data/
   - build/
+  - $HOME/.cache/pip
 script:
 - python3 -m unittest discover
 - python3 celly.py
