@@ -65,7 +65,9 @@
             <span class="score">{{ match.away.score }}</span><br>
             {{ match.away.shots }}<br>
             {{ match.away.w }}-{{ match.away.l }}-{{ match.away.otl }}<br>
-            {{ format_diff(match.away.diff) }}<br>
+            <span style="{{ diff_rgb(match.away.diff) }}">
+              {{ format_diff(match.away.diff) }}
+            </span><br>
           </div>
           <div style="float: left; margin-left: 1em; margin-right: 1em;">
             score<br>
@@ -77,7 +79,9 @@
             <span class="score">{{ match.home.score }}</span><br>
             {{ match.home.shots }}<br>
             {{ match.home.w }}-{{ match.home.l }}-{{ match.home.otl }}<br>
-            {{ format_diff(match.home.diff) }}<br>
+            <span style="{{ diff_rgb(match.home.diff) }}">
+              {{ format_diff(match.home.diff) }}
+            </span><br>
           </div>
           <div class="fin-team-container"  style="float: left;">
             <a href="{{ team_page(match.home.abbr) }}">
@@ -101,18 +105,26 @@
           </div>
           <div style="float: left;">
             {{ match.away.w }}-{{ match.away.l }}-{{ match.away.otl }}<br>
-            {{ format_rating(match.away.rating) }}<br>
-            <img class="trend" src="{{ team_rating_graph_icon(match.away.id) }}"></img><br>
+            <span style="{{ rating_rgb(match.away.rating) }}">
+              {{ format_rating(match.away.rating) }}
+            </span><br>
+            <a href="{{ team_page(match.away.abbr) }}">
+              <img class="trend" src="{{ team_rating_graph_icon(match.away.id) }}"></img><br>
+            </a>
           </div>
           <div style="float: left; margin-left: 1em; margin-right: 1em;">
-            rec.<br>
+            record<br>
             rating<br>
             trend<br>
           </div>
           <div style="float: left;">
             {{ match.home.w }}-{{ match.home.l }}-{{ match.home.otl }}<br>
-            {{ format_rating(match.home.rating) }}<br>
-            <img class="trend" src="{{ team_rating_graph_icon(match.home.id) }}"></img><br>
+            <span style="{{ rating_rgb(match.home.rating) }}">
+              {{ format_rating(match.home.rating) }}
+            </span><br>
+            <a href="{{ team_page(match.home.abbr) }}">
+              <img class="trend" src="{{ team_rating_graph_icon(match.home.id) }}"></img><br>
+            </a>
           </div>
           <div class="prev-team-container" style="float: left;">
             <a href="{{ team_page(match.home.abbr) }}">

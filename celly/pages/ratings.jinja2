@@ -37,7 +37,9 @@
         </span>
       </td>
       <td class="col">
-        {{ format_rating(update.rating) }}
+        <span style="{{ rating_rgb(update.rating) }}">
+          {{ format_rating(update.rating) }}
+        </span>
       </td>
       <td class="col">
         <span class="{{ 'green' if update.diff > 0 else 'red' }}">

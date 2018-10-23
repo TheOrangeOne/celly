@@ -11,3 +11,14 @@ def format_diff(diff):
 
 def ratings_page(date):
     return "{}-ratings.html".format(date)
+
+def rating_rgb(rating):
+    cg = round((rating/100)*255)
+    cr = 255-cg
+    return "color: rgb({}, {}, 0);".format(cr, cg)
+
+def diff_rgb(diff):
+    diff = ((diff+6)/12)*100
+    cg = round((diff/100)*255)
+    cr = 255-cg
+    return "color: rgb({}, {}, 0);".format(cr, cg)
