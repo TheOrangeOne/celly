@@ -16,7 +16,8 @@ cache:
 script:
 - python3 -m unittest discover
 - python3 celly.py
-- cp build/2018-10-19-ratings.html build/index.html
+- TODAY_PAGE="`date +%Y-%m-%d`-matches.html"
+- cp build/$TODAY_PAGE build/index.html
 deploy:
   edge:
     branch: v1.8.47
