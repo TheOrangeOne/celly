@@ -20,8 +20,11 @@
   .fin-team-container {
     margin-top: 0.5em;
   }
+  .prev-team-container {
+    margin-top: 0.5em;
+  }
   .trend {
-    width: 50px;
+    width: 60px;
   }
 </style>
 {% endblock %}
@@ -88,7 +91,7 @@
 
       {% else %}
         <td class="col" style="overflow:hidden;">
-          <div class="team-container" style="float:left;">
+          <div class="prev-team-container" style="float:left;">
             <a href="{{ team_page(match.away.abbr) }}">
               <img class="matchup-logo" src="{{ match.away.svg }}"/>
               <p class="teamabbr">
@@ -99,7 +102,7 @@
           <div style="float: left;">
             {{ match.away.w }}-{{ match.away.l }}-{{ match.away.otl }}<br>
             {{ format_rating(match.away.rating) }}<br>
-            <img class="trend" src="{{ team_rating_graph(match.away.id) }}"></img><br>
+            <img class="trend" src="{{ team_rating_graph_icon(match.away.id) }}"></img><br>
           </div>
           <div style="float: left; margin-left: 1em; margin-right: 1em;">
             rec.<br>
@@ -109,9 +112,9 @@
           <div style="float: left;">
             {{ match.home.w }}-{{ match.home.l }}-{{ match.home.otl }}<br>
             {{ format_rating(match.home.rating) }}<br>
-            <img class="trend" src="{{ team_rating_graph(match.home.id) }}"></img><br>
+            <img class="trend" src="{{ team_rating_graph_icon(match.home.id) }}"></img><br>
           </div>
-          <div class="team-container" style="float: left;">
+          <div class="prev-team-container" style="float: left;">
             <a href="{{ team_page(match.home.abbr) }}">
               <img class="matchup-logo" src="{{ match.home.svg }}"/>
               <p class="teamabbr">

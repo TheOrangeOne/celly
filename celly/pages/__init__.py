@@ -5,7 +5,7 @@ from celly.date import next_ymd, prev_ymd
 from .matches import match_page
 from .digest import digest_page
 from .ratings import format_rating, format_diff, ratings_page
-from .team import team_page, team_rating_graph
+from .team import team_page, team_rating_graph, team_rating_graph_icon
 
 env = Environment(
     loader=PackageLoader("celly", "pages"),
@@ -21,4 +21,5 @@ env.globals["ratings_page"] = ratings_page
 env.globals["match_page"] = match_page
 env.globals["team_page"] = team_page
 env.globals["team_rating_graph"] = team_rating_graph
+env.globals["team_rating_graph_icon"] = team_rating_graph_icon
 env.globals["digest_page"] = digest_page
