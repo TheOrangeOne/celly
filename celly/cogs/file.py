@@ -14,7 +14,7 @@ class ReadJSONFileCog(Cog):
         except FileNotFoundError:
             return None
 
-    def output(self, filename, directory):
+    def __call__(self, filename, directory):
         return self.load_json(filename, directory)
 
 
@@ -24,12 +24,12 @@ class WriteJSONFileCog(Cog):
         with open(path, "w+") as f:
             json.dump(data, f)
 
-    def output(self, filename, data, directory):
+    def __call__(self, filename, data, directory):
         return self.store_json(filename, data, directory)
 
 
 class WriteFilesCog(Cog):
-    def output(self, files, directory):
+    def __call__(self, files, directory):
         for file in files:
             path = os.path.join(directory, file.name)
             if type(file.src) is bytes:
@@ -45,7 +45,7 @@ class FilterFilesDNECog(Cog):
     Input: list of file names and a directory
     Output: list of files that don't exist
     """
-    def output(self, files, directory):
+    def __call__(self, files, directory):
         return list(filter(
             lambda f: not os.path.isfile(os.path.join(directory, f)),
             files

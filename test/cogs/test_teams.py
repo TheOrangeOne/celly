@@ -5,6 +5,8 @@ from celly.cog import Cog
 from celly.cogwheel import CogWheel
 from celly.cogs.teams import TeamsCog
 
+from ..cog_utils import TestCog
+
 
 class TestTeamsCog(unittest.TestCase):
     def setUp(self):
@@ -28,26 +30,32 @@ class TestTeamsCog(unittest.TestCase):
 
         self.wheel.add(TeamsCog(
             name="teams",
-            inputs=["raw_teams"]
+            inputs=dict(
+                cached_teams="raw_teams",
+            ),
         ))
 
-        cog = Cog("check", inputs=["teams"])
-        cog.output = mock.Mock()
-        self.wheel.add(cog)
+        testcog = TestCog(
+            inputs=dict(
+                teams="teams",
+            ),
+            should_be_called_with=dict(
+                teams={
+                    1: {
+                        "id": 1,
+                        "name": "New Jersey Devils",
+                        "abbreviation": "NJD",
+                    },
+                    2: {
+                        "id" : 2,
+                        "name" : "New York Islanders",
+                        "abbreviation" : "NYI",
+                    }
+                }),
+        )
+        self.wheel.add(testcog)
         self.wheel.start()
-        cog.output.assert_called_once()
-        cog.output.assert_called_with({
-            1: {
-                "id": 1,
-                "name": "New Jersey Devils",
-                "abbreviation": "NJD",
-            },
-            2: {
-                "id" : 2,
-                "name" : "New York Islanders",
-                "abbreviation" : "NYI",
-            }
-        })
+        testcog.test()
 
     def test_teams_cog_new(self):
         self.wheel.add(Cog(
@@ -57,7 +65,9 @@ class TestTeamsCog(unittest.TestCase):
 
         teamscog = TeamsCog(
             name="teams",
-            inputs=["raw_teams"]
+            inputs=dict(
+                cached_teams="raw_teams",
+            ),
         )
         teamscog.get_raw_teams = mock.MagicMock(return_value={
             "teams": [{
@@ -72,17 +82,23 @@ class TestTeamsCog(unittest.TestCase):
         self.wheel.add(teamscog)
 
         cog = Cog("check", inputs=["teams"])
-        cog.output = mock.Mock()
-        self.wheel.add(cog)
+        testcog = TestCog(
+            inputs=dict(
+                teams="teams",
+            ),
+            should_be_called_with=dict(
+                teams={
+                    1: {
+                        "id": 1,
+                        "name": "New Jersey Devils",
+                    },
+                    2: {
+                        "id" : 2,
+                        "name" : "New York Islanders",
+                    }
+                }
+            ),
+        )
+        self.wheel.add(testcog)
         self.wheel.start()
-        cog.output.assert_called_once()
-        cog.output.assert_called_with({
-            1: {
-                "id": 1,
-                "name": "New Jersey Devils",
-            },
-            2: {
-                "id" : 2,
-                "name" : "New York Islanders",
-            }
-        })
+        testcog.test()

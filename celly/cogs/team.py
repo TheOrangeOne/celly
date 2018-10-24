@@ -35,7 +35,7 @@ def team_ratings(id, ratings):
 
 
 class TeamRenderCog(Cog):
-    def output(self, teams, ratings):
+    def __call__(self, teams, ratings):
         temp = env.get_template("team.jinja2")
 
         team_pages = []

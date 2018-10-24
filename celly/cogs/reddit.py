@@ -25,7 +25,7 @@ class RedditUpdateTopCog(Cog):
         merged[date] = new["data"]["children"]
         return merged
 
-    def output(self, cached_top, date):
+    def __call__(self, cached_top, date):
         cached = cached_top or {}
         if date in cached:
             return cached

@@ -75,39 +75,58 @@ wheel.add(Cog(
 
 
 wheel.add(ReadJSONFileCog(
-    name="raw_sched_data",
-    inputs=["sched_data_file", "data_directory"]
+    name="cached_sched_data",
+    inputs=dict(
+        filename="sched_data_file",
+        directory="data_directory",
+    ),
 ))
 
 wheel.add(ReadJSONFileCog(
-    name="raw_teams_data",
-    inputs=["teams_data_file", "data_directory"]
+    name="cached_teams_data",
+    inputs=dict(
+        filename="teams_data_file",
+        directory="data_directory",
+    ),
 ))
 
 wheel.add(ReadJSONFileCog(
     name="raw_reddit_top",
-    inputs=["reddit_top_data_file", "data_directory"]
+    inputs=dict(
+        filename="reddit_top_data_file",
+        directory="data_directory",
+    ),
 ))
 
 wheel.add(RedditUpdateTopCog(
     name="reddit_top_by_date",
-    inputs=["raw_reddit_top", "date_f"]
+    inputs=dict(
+        cached_top="raw_reddit_top",
+        date="date_f"
+    ),
 ))
 
 wheel.add(TeamsCog(
     name="teams",
-    inputs=["raw_teams_data"]
+    inputs=dict(
+        cached_teams="cached_teams_data"
+    ),
 ))
 
 
 wheel.add(ScheduleUpdateCog(
     name="schedule",
-    inputs=["raw_sched_data"]
+    inputs=dict(
+        cached_sched="cached_sched_data",
+    ),
 ))
 
 wheel.add(CompletedRegSeasonGamesCog(
     name="current_season_completed_games",
-    inputs=["current_season", "schedule"]
+    inputs=dict(
+        season_s="current_season",
+        sched="schedule",
+    ),
 ))
 
 """
@@ -115,12 +134,12 @@ Match cogs
 """
 wheel.add(RenderDayMatchesCog(
     name="match_pages",
-    inputs=[
-        "schedule",
-        "teams",
-        "current_season_ratings_by_day",
-        "current_season_diffs_by_day",
-    ]
+    inputs=dict(
+        sched="schedule",
+        teams="teams",
+        ratings="current_season_ratings_by_day",
+        diffs="current_season_diffs_by_day",
+    ),
 ))
 
 """
@@ -128,7 +147,10 @@ Digest cogs
 """
 wheel.add(RenderDayDigestCog(
     name="digest_pages",
-    inputs=["schedule", "reddit_top_by_date"]
+    inputs=dict(
+        sched="schedule",
+        reddit_top="reddit_top_by_date",
+    ),
 ))
 
 
@@ -137,17 +159,25 @@ Ratings cogs
 """
 wheel.add(TeamRatingsByDayCog(
     name="current_season_ratings_by_day",
-    inputs=["current_season_completed_games", "teams"]
+    inputs=dict(
+        days="current_season_completed_games",
+        teams="teams",
+    ),
 ))
 
 wheel.add(TeamDiffsByDayCog(
     name="current_season_diffs_by_day",
-    inputs=["current_season_ratings_by_day"]
+    inputs=dict(
+        ratings="current_season_ratings_by_day"
+    ),
 ))
 
 wheel.add(RenderDayRatingsCog(
     name="current_season_ratings_pages",
-    inputs=["current_season_ratings_by_day", "teams"]
+    inputs=dict(
+        ratings_by_day="current_season_ratings_by_day",
+        teams="teams",
+    ),
 ))
 
 """
@@ -156,91 +186,99 @@ Team SVG cogs
 
 wheel.add(TeamsSVGCog(
     name="teams_svg_names",
-    inputs=["teams"]
+    inputs=dict(
+        teams="teams"
+    ),
 ))
 
 wheel.add(FilterFilesDNECog(
     name="missing_teams_svg_names",
-    inputs=["teams_svg_names", "build_directory"]
+    inputs=dict(
+        files="teams_svg_names",
+        directory="build_directory",
+    ),
 ))
 
 wheel.add(TeamsGetSVGCog(
     name="teams_svgs",
-    inputs=["missing_teams_svg_names"]
+    inputs=dict(
+        files="missing_teams_svg_names",
+    ),
 ))
 
 wheel.add(TeamRenderCog(
     name="team_pages",
-    inputs=["teams", "current_season_ratings_by_day"]
+    inputs=dict(
+        teams="teams",
+        ratings="current_season_ratings_by_day",
+    ),
 ))
-
-
 
 """
 File persistence Cogs
 """
 wheel.add(WriteFilesCog(
-    inputs=[
-        "current_season_ratings_pages",
-        "build_directory",
-    ]
+    inputs=dict(
+        files="current_season_ratings_pages",
+        directory="build_directory",
+    ),
 ))
 
 wheel.add(WriteFilesCog(
-    inputs=[
-        "match_pages",
-        "build_directory",
-    ]
+    inputs=dict(
+        files="match_pages",
+        directory="build_directory",
+    ),
 ))
 
 wheel.add(WriteFilesCog(
-    inputs=[
-        "team_pages",
-        "build_directory",
-    ]
+    inputs=dict(
+        files="team_pages",
+        directory="build_directory",
+    ),
 ))
 
 wheel.add(WriteFilesCog(
-    inputs=[
-        "digest_pages",
-        "build_directory",
-    ]
+    inputs=dict(
+        files="digest_pages",
+        directory="build_directory",
+    ),
 ))
 
 wheel.add(WriteFilesCog(
-    inputs=[
-        "teams_svgs",
-        "build_directory",
-    ]
+    inputs=dict(
+        files="teams_svgs",
+        directory="build_directory",
+    ),
 ))
 
 
 wheel.add(WriteJSONFileCog(
-    inputs=[
-        "teams_data_file",
-        "teams",
-        "data_directory",
-    ]
+    inputs=dict(
+        filename="teams_data_file",
+        data="teams",
+        directory="data_directory",
+    ),
 ))
 
 wheel.add(WriteJSONFileCog(
-    inputs=[
-        "sched_data_file",
-        "schedule",
-        "data_directory"
-    ]
+    inputs=dict(
+        filename="sched_data_file",
+        data="schedule",
+        directory="data_directory",
+    ),
 ))
 
 wheel.add(WriteJSONFileCog(
-    inputs=[
-        "reddit_top_data_file",
-        "reddit_top_by_date",
-        "data_directory",
-    ]
+    inputs=dict(
+        filename="reddit_top_data_file",
+        data="reddit_top_by_date",
+        directory="data_directory",
+    ),
 ))
 
 wheel.add(PrintCog(
-    inputs=[""]
+    inputs=dict(),
 ))
 
 wheel.start()

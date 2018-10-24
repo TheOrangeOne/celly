@@ -156,7 +156,7 @@ class ScheduleUpdateCog(Cog):
 
         return last_update_f
 
-    def output(self, cached_sched):
+    def __call__(self, cached_sched):
         if not cached_sched:
             cached_sched = []
 

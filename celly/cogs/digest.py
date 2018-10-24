@@ -14,7 +14,7 @@ class RenderDayDigestCog(Cog):
     """
     """
     "close_games, hot teams, etc"
-    def output(self, sched, reddit_top):
+    def __call__(self, sched, reddit_top):
         days = []
         temp = env.get_template("digest.jinja2")
         dates = [day["date"] for day in sched]

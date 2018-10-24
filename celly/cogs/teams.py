@@ -30,7 +30,7 @@ class TeamsCog(Cog):
             teams[id] = team
         return teams
 
-    def output(self, cached_teams):
+    def __call__(self, cached_teams):
         if cached_teams:
             return self.get_cached_teams(cached_teams)
         raw_teams = self.get_raw_teams()
@@ -43,7 +43,7 @@ class TeamsSVGCog(Cog):
     Input: teams dict
     Output: list of svg files for each team
     """
-    def output(self, teams):
+    def __call__(self, teams):
         svgs = []
         for id in teams:
             svgs.append("{}.svg".format(id))
@@ -60,7 +60,7 @@ class TeamsGetSVGCog(Cog):
     Output: list of svg files retrieved from NHL api
     """
     IMG_API_BASE = "https://www-league.nhlstatic.com/builds/si  te-core/86d4b76cc03a4d111ee0e20f9f62eb054eef3b74_1502985652/imag  es/logos/team/current/team-{}-dark.svg"
-    def output(self, files):
+    def __call__(self, files):
         svgs = []
         for filename in files:
             id = filename.split('.')[0]

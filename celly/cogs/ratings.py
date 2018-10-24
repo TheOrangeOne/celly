@@ -21,7 +21,7 @@ class TeamRatingsByDayCog(Cog):
     Output: ratings by date grouped by team id
     """
 
-    def output(self, days, teams):
+    def __call__(self, days, teams):
         model = RatingModel(teams)
         ratings_by_day = {}
         for date, games in days.items():
@@ -43,7 +43,7 @@ class TeamDiffsByDayCog(Cog):
 
     Output: rating diff by day
     """
-    def output(self, ratings):
+    def __call__(self, ratings):
         diffs = {}
         for date, day_ratings in ratings.items():
             prev_date = prev_ymd(date)
@@ -87,7 +87,7 @@ class RenderDayRatingsCog(Cog):
     Input: RatingsByDay data
     Output: list of File for each day
     """
-    def output(self, ratings_by_day, teams):
+    def __call__(self, ratings_by_day, teams):
         pages = []
         prev_ratings = {}
         temp = env.get_template("ratings.jinja2")

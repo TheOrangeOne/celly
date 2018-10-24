@@ -1,5 +1,6 @@
 from celly.cog import Cog
 
+
 class GamesCog(Cog):
     """Cog for game data.
 
@@ -8,7 +9,7 @@ class GamesCog(Cog):
     Output: flattened list of all games in the schedule
     """
 
-    def output(self, sched):
+    def __call__(self, sched):
         games = []
         for day in sched:
             if day["totalGames"] == 0:
@@ -20,7 +21,7 @@ class GamesCog(Cog):
 class CompletedRegSeasonGamesCog(Cog):
     """Cog for getting only completed games for the current season.
     """
-    def output(self, season_s, sched):
+    def __call__(self, season_s, sched):
         def completed_reg_season(game):
             s = game["season"] == season_s
             t = game["gameType"] == "R"

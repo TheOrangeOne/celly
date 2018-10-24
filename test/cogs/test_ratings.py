@@ -5,6 +5,8 @@ from celly.cog import Cog
 from celly.cogwheel import CogWheel
 from celly.cogs.ratings import TeamRatingsByDayCog, RenderDayRatingsCog
 
+from ..cog_utils import TestCog
+
 
 class TestRatingsCog(unittest.TestCase):
     def setUp(self):
@@ -70,57 +72,67 @@ class TestRatingsCog(unittest.TestCase):
             }))
         self.wheel.add(TeamRatingsByDayCog(
             name="ratings",
-            inputs=["games", "teams"],
+            inputs=dict(
+                days="games",
+                teams="teams",
+            ),
         ))
 
         cog = Cog("check", inputs=["ratings"])
         cog.output = mock.Mock()
+        testcog = TestCog(
+            inputs=dict(
+                ratings="ratings",
+            ),
+            should_be_called_with=dict(
+                ratings={
+                    "2018-10-12": {
+                        1: {
+                            "rating": 1500.0,
+                            "gp": 0,
+                        },
+                        2: {
+                            "rating": 1500.0,
+                            "gp": 0,
+                        },
+                    },
+                    "2018-10-13": {
+                        1: {
+                            "rating": 1507.5,
+                            "gp": 1,
+                        },
+                        2: {
+                            "rating": 1492.5,
+                            "gp": 1,
+                        },
+                    },
+                    "2018-10-14": {
+                        1: {
+                            "rating": 1507.5,
+                            "gp": 1,
+                        },
+                        2: {
+                            "rating": 1492.5,
+                            "gp": 1,
+                        },
+                    },
+                    "2018-10-15": {
+                        1: {
+                            "rating": 1514.6764000042328,
+                            "gp": 2,
+                        },
+                        2: {
+                            "rating": 1485.3235999957672,
+                            "gp": 2,
+                        },
+                    }
+                }
+            ),
+        )
 
-        self.wheel.add(cog)
+        self.wheel.add(testcog)
         self.wheel.start()
-        cog.output.assert_called_once()
-        cog.output.assert_called_with({
-            "2018-10-12": {
-                1: {
-                    "rating": 1500.0,
-                    "gp": 0,
-                },
-                2: {
-                    "rating": 1500.0,
-                    "gp": 0,
-                },
-            },
-            "2018-10-13": {
-                1: {
-                    "rating": 1507.5,
-                    "gp": 1,
-                },
-                2: {
-                    "rating": 1492.5,
-                    "gp": 1,
-                },
-            },
-            "2018-10-14": {
-                1: {
-                    "rating": 1507.5,
-                    "gp": 1,
-                },
-                2: {
-                    "rating": 1492.5,
-                    "gp": 1,
-                },
-            },
-            "2018-10-15": {
-                1: {
-                    "rating": 1514.6764000042328,
-                    "gp": 2,
-                },
-                2: {
-                    "rating": 1485.3235999957672,
-                    "gp": 2,
-                },
-            }
-        })
+        testcog.test()
 
     def test_render_page(self):
         self.wheel.add(Cog(
@@ -160,13 +172,17 @@ class TestRatingsCog(unittest.TestCase):
             }))
         self.wheel.add(RenderDayRatingsCog(
             name="render",
-            inputs=["ratings", "teams"],
+            inputs=dict(
+                ratings_by_day="ratings",
+                teams="teams",
+            ),
         ))
 
-        cog = Cog("check", inputs=["render"])
-        cog.output = mock.Mock()
-
-        self.wheel.add(cog)
+        testcog = TestCog(
+            inputs=dict(
+                render="render",
+            ),
+        )
+        self.wheel.add(testcog)
         self.wheel.start()
-        cog.output.assert_called_once()
-        # cog.output.assert_called_with([])
+        testcog.test()
