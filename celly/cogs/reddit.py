@@ -2,36 +2,47 @@ import copy
 import logging
 
 from celly.cog import Cog
-from celly.web import get_reddit
+import celly.web
 
 
 log = logging.getLogger(__name__)
 
 
-class RedditUpdateTopCog(Cog):
-    API = "r/hockey/top/.json?count={}"
+class RedditUpdateSubsTopCog(Cog):
+    API = "r/{}/top/.json?count={}"
 
-    def get_top_for_day(self, num):
-        url = self.API.format(num)
+    def get_top_for_day(self, sub, num):
+        url = self.API.format(sub, num)
         try:
-            top = get_reddit(url)
+            top = celly.web.get_reddit(url)
         except Exception:
             top = None
             log.error("failed to get reddit top posts")
         return top
 
     def merge_new(self, cached, new, date):
-        merged = copy.deepcopy(cached)
-        merged[date] = new["data"]["children"]
-        return merged
-
-    def __call__(self, cached_top, date):
-        cached = cached_top or {}
-        if date in cached:
-            return cached
-
-        new_top = self.get_top_for_day(20)
-        if new_top:
-            top = self.merge_new(cached, new_top, date)
-            return top
+        cached[date] = [post["data"] for post in new["data"]["children"]]
         return cached
+
+    def __call__(self, cached_top, date, subs=["hockey"], num=20):
+        cached = cached_top or {}
+        # TODO migration code can be removed next deploy
+        for date, cache in copy.deepcopy(cached).items():
+            if "hockey" not in cached:
+                cached["hockey"] = {}
+            cached["hockey"][date] = [post["data"] for post in cache]
+
+        new_tops = {}
+        for sub in subs:
+            new_tops[sub] = {}
+            cache = copy.deepcopy(cached.get(sub, {}))
+            if date in cache:
+                new_tops[sub] = cache
+                continue
+
+            new_top = self.get_top_for_day(sub, num)
+            if not new_top:
+                continue
+            new_top = self.merge_new(cache, new_top, date)
+            new_tops[sub] = new_top
+        return new_tops

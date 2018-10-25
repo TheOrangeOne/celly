@@ -43,9 +43,10 @@ class CogWheel(object):
                 cog.out = cog(**cog_inputs_with_outputs)
             except TypeError as e:
                 cogcls = cog.__class__.__name__
+                cog_inputs = ', '.join(cog.inputs.keys())
                 raise CogArgError(
                     '''Error in {}\n{}. \n'''
-                    '''args: {}'''.format(cogcls, e, cog_inputs_with_outputs)
+                    '''args: {}'''.format(cogcls, e, cog_inputs)
                 )
 
             self.computed_cogs[name] = cog

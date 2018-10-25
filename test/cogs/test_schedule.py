@@ -1,10 +1,10 @@
 from datetime import datetime, timedelta
-import unittest
 
 from celly.cogs.schedule import ScheduleUpdateCog
+from ..cog_utils import TestCase
 
 
-class TestScheduleUpdateCog(unittest.TestCase):
+class TestScheduleUpdateCog(TestCase):
     def setUp(self):
         self.cog = ScheduleUpdateCog()
 

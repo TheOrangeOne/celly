@@ -36,7 +36,7 @@
   {% for post in reddit_top %}
   <ul>
     <li>
-      <a href="{{ post.data.url }}">{{ post.data.title }}</a> | <a href="{{ "https://old.reddit.com%s"%post.data.permalink }}">comments</a>
+      <a href="{{ post.url }}">{{ post.title }}</a> | <a href="{{ "https://old.reddit.com%s"%post.permalink }}">comments</a>
     </li>
   </ul>
   {% endfor %}

@@ -1,9 +1,14 @@
+import os
+
+import matplotlib.pyplot as plt
+
 from celly.date import next_ymd, prev_ymd
 from celly.cog import Cog
 from celly.cogs.teams import get_id_abbr, team_svg
 from celly.file import File
 from celly.pages import env
 from celly.pages.ratings import ratings_page
+from celly.pages.team import team_rating_graph, team_rating_graph_icon
 from celly.rating import RatingModel, normalize_rating
 
 
@@ -112,3 +117,33 @@ class RenderDayRatingsCog(Cog):
             prev_ratings = ratings
 
         return pages
+
+
+def gen_team_rating_graph(id, ratings, directory):
+    team_ratings_by_date = {}
+    dates = []
+    team_ratings = []
+    plt.xticks(rotation=270)
+    for date, rating in ratings.items():
+        team_rating = rating[id]
+        dates.append(date)
+        r = normalize_rating(team_rating["rating"])
+        team_ratings.append(r)
+    l = plt.plot(dates, team_ratings, 'ro-',  label='line 2')
+    # for teams page
+    path = os.path.join(directory, team_rating_graph(id))
+    plt.savefig(path, bbox_inches = "tight")
+    # for icon
+    frame = plt.gca()
+    frame.axes.get_xaxis().set_visible(False)
+    frame.axes.get_yaxis().set_visible(False)
+    plt.setp(l, linewidth=12, color='r')
+    path = os.path.join(directory, team_rating_graph_icon(id))
+    plt.savefig(path)
+    plt.clf()
+
+
+class TeamRatingsGraphsCog(Cog):
+    def __call__(self, teams, ratings, directory):
+        for id, team in teams.items():
+            gen_team_rating_graph(id, ratings, directory)

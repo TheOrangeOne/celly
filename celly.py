@@ -15,9 +15,10 @@ from celly.cogs.ratings import (
     RenderDayRatingsCog,
     TeamDiffsByDayCog,
     TeamRatingsByDayCog,
+    TeamRatingsGraphsCog,
 )
 from celly.cogs.reddit import (
-    RedditUpdateTopCog,
+    RedditUpdateSubsTopCog,
 )
 from celly.cogs.team import TeamRenderCog
 from celly.cogs.teams import (
@@ -91,17 +92,17 @@ wheel.add(ReadJSONFileCog(
 ))
 
 wheel.add(ReadJSONFileCog(
-    name="raw_reddit_top",
+    name="cached_reddit_top",
     inputs=dict(
         filename="reddit_top_data_file",
         directory="data_directory",
     ),
 ))
 
-wheel.add(RedditUpdateTopCog(
+wheel.add(RedditUpdateSubsTopCog(
     name="reddit_top_by_date",
     inputs=dict(
-        cached_top="raw_reddit_top",
+        cached_top="cached_reddit_top",
         date="date_f"
     ),
 ))
@@ -210,7 +211,15 @@ wheel.add(TeamRenderCog(
     name="team_pages",
     inputs=dict(
         teams="teams",
+    ),
+))
+
+wheel.add(TeamRatingsGraphsCog(
+    name="team_rating_graphs",
+    inputs=dict(
+        teams="teams",
         ratings="current_season_ratings_by_day",
+        directory="build_directory",
     ),
 ))
 

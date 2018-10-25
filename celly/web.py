@@ -36,6 +36,7 @@ def auth_reddit():
     headers = {
         "User-Agent": REDDIT_USER_AGENT,
     }
+    log.info("REDDIT AUTH")
     response = requests.post(
         "https://www.reddit.com/api/v1/access_token",
         auth=client_auth,
@@ -58,6 +59,7 @@ def get_reddit(url):
         "User-Agent": REDDIT_USER_AGENT
     }
     url = REDDIT_BASE.format(url)
+    log.info("GET {}".format(url))
     response = requests.get(url, headers=headers)
     rjson = response.json()
     return rjson

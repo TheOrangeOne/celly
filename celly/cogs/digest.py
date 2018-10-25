@@ -18,6 +18,7 @@ class RenderDayDigestCog(Cog):
         days = []
         temp = env.get_template("digest.jinja2")
         dates = [day["date"] for day in sched]
+        reddit_top = reddit_top.get("hockey", {})
 
         def get_page(date):
             return digest_page(date) if date in dates else ''

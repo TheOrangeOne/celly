@@ -1,17 +1,10 @@
-import unittest
-import unittest.mock as mock
-
 from celly.cog import Cog
-from celly.cogwheel import CogWheel
 from celly.cogs.ratings import TeamRatingsByDayCog, RenderDayRatingsCog
 
-from ..cog_utils import TestCog
+from ..cog_utils import TestCog, TestCase
 
 
-class TestRatingsCog(unittest.TestCase):
-    def setUp(self):
-        self.wheel = CogWheel()
-
+class TestRatingsCog(TestCase):
     def test_ratings_basic(self):
         self.wheel.add(Cog(
             name="teams",
@@ -69,7 +62,9 @@ class TestRatingsCog(unittest.TestCase):
                         "currentPeriod": 3
                     },
                 }],
-            }))
+            }
+        ))
+
         self.wheel.add(TeamRatingsByDayCog(
             name="ratings",
             inputs=dict(
@@ -78,8 +73,6 @@ class TestRatingsCog(unittest.TestCase):
             ),
         ))
 
-        cog = Cog("check", inputs=["ratings"])
-        cog.output = mock.Mock()
         testcog = TestCog(
             inputs=dict(
                 ratings="ratings",

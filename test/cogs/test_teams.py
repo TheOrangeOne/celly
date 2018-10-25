@@ -1,17 +1,12 @@
-import unittest
 import unittest.mock as mock
 
 from celly.cog import Cog
-from celly.cogwheel import CogWheel
 from celly.cogs.teams import TeamsCog
 
-from ..cog_utils import TestCog
+from ..cog_utils import TestCog, TestCase
 
 
-class TestTeamsCog(unittest.TestCase):
-    def setUp(self):
-        self.wheel = CogWheel()
-
+class TestTeamsCog(TestCase):
     def test_teams_cog_cached(self):
         self.wheel.add(Cog(
             name="raw_teams",
@@ -81,7 +76,6 @@ class TestTeamsCog(unittest.TestCase):
 
         self.wheel.add(teamscog)
 
-        cog = Cog("check", inputs=["teams"])
         testcog = TestCog(
             inputs=dict(
                 teams="teams",
