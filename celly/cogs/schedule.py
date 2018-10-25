@@ -1,12 +1,12 @@
-from datetime import datetime, timedelta
+import datetime
 from functools import reduce
 
 from celly.cog import Cog
 from celly.nhl import API
-from celly.web import get_json
+import celly.web
 
 """
-The API is pretty straightforward and returns generally sensible data.
+The API is pretty straightforward.
 
 Doing a GET between two dates will return the schedule data for each day
 between the two dates (inclusive).
@@ -77,14 +77,12 @@ API returns _nothing_ in the "dates" field.
 
 class ScheduleUpdateCog(Cog):
     DATE_F         = "%Y-%m-%d"
-    SEASON_START_F = "2018-10-03"
-    SEASON_START   = datetime.strptime(SEASON_START_F, DATE_F)
 
     def _fetch_data(self, start, end):
         endpoint = "schedule?startDate={}&endDate={}&expand=schedule.linescore"
         endpoint = endpoint.format(start, end)
         url = "{}{}".format(API, endpoint)
-        r = get_json(url)
+        r = celly.web.get_json(url)
         return r
 
     def _merge_new_schedule(self, old_sched, new_sched_data):
@@ -119,7 +117,7 @@ class ScheduleUpdateCog(Cog):
         sched_i = 0
 
         for day_i in range(0, ndays):
-            day = season_start + timedelta(days=day_i)
+            day = season_start + datetime.timedelta(days=day_i)
             day_f = day.strftime(self.DATE_F)
 
             if sched_i >= len(sched) or "date" not in sched[sched_i] or sched[sched_i]["date"] != day_f:
@@ -143,8 +141,8 @@ class ScheduleUpdateCog(Cog):
     def _is_game_complete(self, game):
         return game["status"]["abstractGameState"] == "Final"
 
-    def _last_update(self, sched):
-        last_update_f = self.SEASON_START_F
+    def _last_update(self, sched, season_start_f):
+        last_update_f = season_start_f
         if len(sched):
             # check each of the day schedules to make sure they completed
             for day in sched:
@@ -152,24 +150,27 @@ class ScheduleUpdateCog(Cog):
                     last_update_f = day["date"]
                     break
         else:
-            last_update_f = self.SEASON_START_F
+            last_update_f = season_start_f
 
         return last_update_f
 
-    def __call__(self, cached_sched):
+    def __call__(self, cached_sched, now=None, season_start="2018-10-03"):
+        season_start_f = season_start
+        season_start = datetime.datetime.strptime(season_start_f, self.DATE_F)
         if not cached_sched:
             cached_sched = []
 
-        now = datetime.now()
+        if not now:
+            now = datetime.datetime.now()
         now_f = now.strftime(self.DATE_F)
 
-        last_update_f = self._last_update(cached_sched)
-        last_update = datetime.strptime(last_update_f, self.DATE_F)
+        last_update_f = self._last_update(cached_sched, season_start_f)
+        last_update = datetime.datetime.strptime(last_update_f, self.DATE_F)
 
         if last_update >= now:
             return cached_sched
 
         new_sched_data = self._fetch_data(last_update_f, now_f)
         sched = self._merge_new_schedule(cached_sched, new_sched_data)
-        sched = self._sanitize_schedule(sched, self.SEASON_START, now)
+        sched = self._sanitize_schedule(sched, season_start, now)
         return sched
