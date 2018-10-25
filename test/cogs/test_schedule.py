@@ -7,6 +7,150 @@ from celly.cogs.schedule import ScheduleUpdateCog
 from ..cog_utils import TestCase, TestCog
 
 
+EXAMPLE_API_DATA = {
+    "totalItems": 1,
+    "totalGames": 1,
+    "dates": [{
+        "date": "2018-10-11",
+        "totalItems": 1,
+        "totalGames": 1,
+        "games": [ {
+            "gameType" : "R",
+            "season" : "20182019",
+            "gameDate" : "2018-10-12T00:00:00Z",
+            "status" : {
+                "abstractGameState" : "Final",
+            },
+            "teams" : {
+                "away" : {
+                    "leagueRecord" : {
+                        "wins" : 2,
+                        "losses" : 0,
+                        "ot" : 2,
+                        "type" : "league"
+                    },
+                    "score" : 3,
+                    "team" : {
+                        "id" : 16,
+                        "name" : "Chicago Blackhawks",
+                    }
+                },
+                "home" : {
+                    "leagueRecord" : {
+                        "wins" : 1,
+                        "losses" : 1,
+                        "ot" : 1,
+                        "type" : "league"
+                    },
+                    "score" : 4,
+                    "team" : {
+                        "id" : 30,
+                        "name" : "Minnesota Wild",
+                    }
+                }
+            },
+            "linescore" : {
+                "currentPeriod" : 4,
+                "currentPeriodOrdinal" : "OT",
+                "currentPeriodTimeRemaining" : "Final",
+                "teams" : {
+                    "home" : {
+                        "team" : {
+                            "id" : 30,
+                            "name" : "Minnesota Wild",
+                        },
+                        "goals" : 4,
+                        "shotsOnGoal" : 46,
+                    },
+                    "away" : {
+                        "team" : {
+                            "id" : 16,
+                            "name" : "Chicago Blackhawks",
+                        },
+                        "goals" : 3,
+                        "shotsOnGoal" : 30,
+                    }
+                },
+            },
+        }],
+    }]
+}
+
+EXAMPLE_SCHED_OUTPUT = [
+    {
+        'date': '2018-10-10',
+        'totalGames': 0,
+        'games': []
+    },
+    {
+        'date': '2018-10-11',
+        'totalItems': 1,
+        'totalGames': 1,
+        'games': [{
+            'gameType': 'R',
+            'season': '20182019',
+            'gameDate': '2018-10-12T00:00:00Z',
+            'status': {'abstractGameState': 'Final'},
+            'teams': {
+                'away': {
+                    'leagueRecord': {
+                        'wins': 2,
+                        'losses': 0,
+                        'ot': 2,
+                        'type': 'league'
+                    },
+                    'score': 3,
+                    'team': {
+                        'id': 16,
+                        'name': 'Chicago Blackhawks'
+                    }
+                },
+                'home': {
+                    'leagueRecord': {
+                        'wins': 1,
+                        'losses': 1,
+                        'ot': 1,
+                        'type': 'league'
+                    },
+                    'score': 4,
+                    'team': {
+                        'id': 30,
+                        'name': 'Minnesota Wild'
+                    }
+                }
+            },
+            'linescore': {
+                'currentPeriod': 4,
+                'currentPeriodOrdinal': 'OT',
+                'currentPeriodTimeRemaining': 'Final',
+                'teams': {
+                    'home': {
+                        'team': {
+                            'id': 30,
+                            'name': 'Minnesota Wild'
+                        },
+                        'goals': 4,
+                        'shotsOnGoal': 46
+                    },
+                    'away': {
+                        'team': {
+                            'id': 16,
+                            'name': 'Chicago Blackhawks',
+                        },
+                        'goals': 3,
+                        'shotsOnGoal': 30
+                    }
+                }
+            }
+        }]
+    }, {
+        'date': '2018-10-12',
+        'totalGames': 0,
+        'games': []
+    }
+]
+
+
 class TestScheduleUpdateCog(TestCase):
     def setUp(self):
         super().setUp()
@@ -289,74 +433,7 @@ class TestScheduleUpdateCog(TestCase):
 
     @mock.patch("celly.web.get_json")
     def test_no_cache(self, mock_get_json):
-        mock_get_json.return_value = {
-            "totalItems": 1,
-            "totalGames": 1,
-            "dates": [{
-                "date": "2018-10-11",
-                "totalItems": 1,
-                "totalGames": 1,
-                "games": [ {
-                    "gameType" : "R",
-                    "season" : "20182019",
-                    "gameDate" : "2018-10-12T00:00:00Z",
-                    "status" : {
-                        "abstractGameState" : "Final",
-                    },
-                    "teams" : {
-                        "away" : {
-                            "leagueRecord" : {
-                                "wins" : 2,
-                                "losses" : 0,
-                                "ot" : 2,
-                                "type" : "league"
-                            },
-                            "score" : 3,
-                            "team" : {
-                                "id" : 16,
-                                "name" : "Chicago Blackhawks",
-                            }
-                        },
-                        "home" : {
-                            "leagueRecord" : {
-                                "wins" : 1,
-                                "losses" : 1,
-                                "ot" : 1,
-                                "type" : "league"
-                            },
-                            "score" : 4,
-                            "team" : {
-                                "id" : 30,
-                                "name" : "Minnesota Wild",
-                            }
-                        }
-                    },
-                    "linescore" : {
-                        "currentPeriod" : 4,
-                        "currentPeriodOrdinal" : "OT",
-                        "currentPeriodTimeRemaining" : "Final",
-                        "teams" : {
-                            "home" : {
-                                "team" : {
-                                    "id" : 30,
-                                    "name" : "Minnesota Wild",
-                                },
-                                "goals" : 4,
-                                "shotsOnGoal" : 46,
-                            },
-                            "away" : {
-                                "team" : {
-                                    "id" : 16,
-                                    "name" : "Chicago Blackhawks",
-                                },
-                                "goals" : 3,
-                                "shotsOnGoal" : 30,
-                            }
-                        },
-                    },
-                }],
-            }]
-        }
+        mock_get_json.return_value = EXAMPLE_API_DATA
         self.wheel.add(Cog(
             name="cached_sched",
             output=lambda: None
@@ -381,79 +458,7 @@ class TestScheduleUpdateCog(TestCase):
         testcog = TestCog(
             inputs=dict(sched="sched"),
             should_be_called_with=dict(
-                sched=[
-                    {
-                        'date': '2018-10-10',
-                        'totalGames': 0,
-                        'games': []
-                    },
-                    {
-                        'date': '2018-10-11',
-                        'totalItems': 1,
-                        'totalGames': 1,
-                        'games': [{
-                            'gameType': 'R',
-                            'season': '20182019',
-                            'gameDate': '2018-10-12T00:00:00Z',
-                            'status': {'abstractGameState': 'Final'},
-                            'teams': {
-                                'away': {
-                                    'leagueRecord': {
-                                        'wins': 2,
-                                        'losses': 0,
-                                        'ot': 2,
-                                        'type': 'league'
-                                    },
-                                    'score': 3,
-                                    'team': {
-                                        'id': 16,
-                                        'name': 'Chicago Blackhawks'
-                                    }
-                                 },
-                                'home': {
-                                    'leagueRecord': {
-                                        'wins': 1,
-                                        'losses': 1,
-                                        'ot': 1,
-                                        'type': 'league'
-                                    },
-                                    'score': 4,
-                                    'team': {
-                                        'id': 30,
-                                        'name': 'Minnesota Wild'
-                                    }
-                                }
-                            },
-                            'linescore': {
-                                'currentPeriod': 4,
-                                'currentPeriodOrdinal': 'OT',
-                                'currentPeriodTimeRemaining': 'Final',
-                                 'teams': {
-                                     'home': {
-                                         'team': {
-                                             'id': 30,
-                                             'name': 'Minnesota Wild'
-                                         },
-                                         'goals': 4,
-                                         'shotsOnGoal': 46
-                                     },
-                                     'away': {
-                                         'team': {
-                                             'id': 16,
-                                             'name': 'Chicago Blackhawks',
-                                         },
-                                         'goals': 3,
-                                         'shotsOnGoal': 30
-                                     }
-                                 }
-                            }
-                        }]
-                    }, {
-                        'date': '2018-10-12',
-                        'totalGames': 0,
-                        'games': []
-                    }
-                ]
+                sched=EXAMPLE_SCHED_OUTPUT,
             )
         )
         self.wheel.add(testcog)

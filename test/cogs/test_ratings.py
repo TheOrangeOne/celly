@@ -1,7 +1,11 @@
 from celly.cog import Cog
-from celly.cogs.ratings import TeamRatingsByDayCog, RenderDayRatingsCog
+from celly.cogs.ratings import (
+    RenderDayRatingsCog,
+    TeamDiffsByDayCog,
+    TeamRatingsByDayCog,
+)
 
-from ..cog_utils import TestCog, TestCase
+from ..cog_utils import TestCase, TestCog
 
 
 class TestRatingsCog(TestCase):
@@ -176,6 +180,61 @@ class TestRatingsCog(TestCase):
                 render="render",
             ),
         )
+        self.wheel.add(testcog)
+        self.wheel.start()
+        testcog.test()
+
+
+class TestDiffsByDayCog(TestCase):
+    def test_sanity(self):
+        self.wheel.add(Cog(
+            name="ratings",
+            output=lambda: {
+                "2018-10-13": {
+                    1: {
+                        "rating": 1500.0,
+                        "gp": 1,
+                    },
+                    2: {
+                        "rating": 1500.0,
+                        "gp": 1,
+                    },
+                },
+                "2018-10-14": {
+                    1: {
+                        "rating": 1505.0,
+                        "gp": 2,
+                    },
+                    2: {
+                        "rating": 1495.0,
+                        "gp": 2,
+                    },
+                }
+            }
+        ))
+        self.wheel.add(TeamDiffsByDayCog(
+            name="diffs",
+            inputs=dict(
+                ratings="ratings"
+            )
+        ))
+
+        testcog = TestCog(
+            inputs=dict(diffs="diffs"),
+            should_be_called_with=dict(
+                diffs={
+                    "2018-10-13": {
+                        1: 0.0,
+                        2: 0.0,
+                    },
+                    "2018-10-14": {
+                        1: 2.5,
+                        2: -2.5,
+                    }
+                }
+            )
+        )
+
         self.wheel.add(testcog)
         self.wheel.start()
         testcog.test()
