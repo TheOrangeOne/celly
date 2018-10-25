@@ -1,4 +1,5 @@
 # celly
+[![codecov](https://codecov.io/gh/TheOrangeOne/celly/branch/master/graph/badge.svg)](https://codecov.io/gh/TheOrangeOne/celly)
 
 ## install
 

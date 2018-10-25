@@ -9,16 +9,20 @@ env:
   - secure: WUBY5N9MuXnF0sRu+p265/iau/8Yct4CjplDnGxfuxVXunLbFLRoM82dwGwmaOW5H9E6QAJJFG9s75YoWaEoqwgYkRzIS/zTOBSfCU4aOs38+xTsnqZVnzwzB4hhkM+p/24DRHiCREAQ0YccL8ORwK7EFpZcN/zrjZJczMp6imfwm/OJdlG9sDlLea5gIBeE9btTHISzZDKT6QPnSOZJ2j4FRg+ap5UpZmtQTYiBDDsx7KGs/AUxUJtCPNhKzJ0KUquL1aDej5ZWtlRzC98O1jX+Ebe4TZDQ4V+v3f+4l/srFRs1yPTcnSiiKjEB1/+fO4sQS1i0lQ2YfNeTkUuU7AN3ISHKLiqD9yxHZPhdYLzKwjqP5s9hDP9iaQ+gYKS9TJRL0JYP7iWQIk+KO6KMRF0QflH5zxpmeMsyHI4GXBudxat4vc3m0ivHNq6QOXaxe2skTV3UIUPY7sosZCvQVGhSws1St1/dOntQz14BHctfdzBMK01b5RIaJx5hJSbjFqpCUZhcIuO/YfzdSc1/m8OYCQd/SvxgxwE0YtGUU2N1HePeNaCuai3brZ7qN3JhimiW9/iu9dHMnlb/g0r4flsL5yFtaaf/WFrk91/jxvy+VzDlYgHzZ+iPSh8TksjZDtuaVqeFqPV5uhYNPT9PUO7ix7P26C4GR4T13x1bbWY=
 before_install:
 - export TZ=America/Toronto
+install:
+  - pip install codecov
 cache:
   directories:
   - data/
   - build/
   - $HOME/.cache/pip
 script:
-- python3 -m unittest discover
+- coverage run -m unittest discover
 - python3 celly.py
 - TODAY_PAGE="`date +%Y-%m-%d`-matches.html"
 - cp build/$TODAY_PAGE build/index.html
+after_success:
+  - codecov
 deploy:
   edge:
     branch: v1.8.47
