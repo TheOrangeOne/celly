@@ -26,11 +26,6 @@ class RedditUpdateSubsTopCog(Cog):
 
     def __call__(self, cached_top, date, subs=["hockey"], num=20):
         cached = cached_top or {}
-        # TODO migration code can be removed next deploy
-        for date, cache in copy.deepcopy(cached).items():
-            if "hockey" not in cached:
-                cached["hockey"] = {}
-            cached["hockey"][date] = [post["data"] for post in cache]
 
         new_tops = {}
         for sub in subs:
