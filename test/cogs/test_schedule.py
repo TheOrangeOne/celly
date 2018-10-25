@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from freezegun import freeze_time
 from unittest import mock
 
 from celly.cog import Cog
