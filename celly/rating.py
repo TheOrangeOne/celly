@@ -4,10 +4,6 @@ def normalize_rating(rating, min=1400, max=1600):
     return ((rating - min) / (max - min))*100
 
 class RatingModel:
-    IR = 1500.0
-    HF = 0
-    SP = 400
-
     def __init__(self, ids={}, ir=1500.0, hf=0, sp=400, kf=None):
         self.ratings = {}
         for id in ids:

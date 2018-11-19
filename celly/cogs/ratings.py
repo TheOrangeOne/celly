@@ -144,6 +144,9 @@ def gen_team_rating_graph(id, ratings, directory):
 
 
 class TeamRatingsGraphsCog(Cog):
-    def __call__(self, teams, ratings, directory):
+    def __call__(self, teams, ratings, directory, enabled=True):
+        if not enabled:
+            return
+
         for id, team in teams.items():
             gen_team_rating_graph(id, ratings, directory)

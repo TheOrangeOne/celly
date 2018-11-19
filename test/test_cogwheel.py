@@ -206,3 +206,51 @@ class TestCogWheel(unittest.TestCase):
         self.engine.start()
 
         testcog.test()
+
+    def test_cog_map(self):
+        datacog = Cog(
+            name="list",
+            output=lambda: [{ 'i': i, 'j': i + 1 } for i in range(10)]
+        )
+        def map(i, j):
+            return i + j
+        testcog = TestCog(
+            inputs=dict(
+                d="outcog",
+            ),
+            should_be_called_with=dict(
+                d=[1, 3, 5, 7, 9, 11, 13, 15, 17, 19],
+            )
+        )
+        self.engine.add(datacog)
+        self.engine.add(testcog)
+        self.engine.map("list", map, "outcog")
+        self.engine.start()
+        testcog.test()
+
+    def test_cog_map_map(self):
+        datacog = Cog(
+            name="list",
+            output=lambda: [{ 'i': i, 'j': i + 1 } for i in range(3)]
+        )
+
+        def map1(i, j):
+            return { 'r': i + j }
+
+        def map2(r):
+            return 2 * r
+
+        testcog = TestCog(
+            inputs=dict(
+                d="out2",
+            ),
+            should_be_called_with=dict(
+                d=[2, 6, 10],
+            )
+        )
+        self.engine.add(datacog)
+        self.engine.add(testcog)
+        self.engine.map("list", map1, "out1")
+        self.engine.map("out1", map2, "out2")
+        self.engine.start()
+        testcog.test()

@@ -114,11 +114,16 @@ wheel.add(TeamsCog(
     ),
 ))
 
+wheel.add(Cog(
+    name="FORCE_CACHE",
+    output=lambda: not os.environ.get("CELLY_FORCE_CACHE", False),
+))
 
 wheel.add(ScheduleUpdateCog(
     name="schedule",
     inputs=dict(
         cached_sched="cached_sched_data",
+        fetch="FORCE_CACHE",
     ),
 ))
 
@@ -214,12 +219,18 @@ wheel.add(TeamRenderCog(
     ),
 ))
 
+wheel.add(Cog(
+    name="GENERATE_GRAPHS",
+    output=lambda: os.environ.get("CELLY_GEN_GRAPHS", True)
+))
+
 wheel.add(TeamRatingsGraphsCog(
     name="team_rating_graphs",
     inputs=dict(
         teams="teams",
         ratings="current_season_ratings_by_day",
         directory="build_directory",
+        enabled="GENERATE_GRAPHS"
     ),
 ))
 

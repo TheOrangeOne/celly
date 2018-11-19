@@ -90,11 +90,14 @@ class ScheduleUpdateCog(Cog):
 
         return last_update_f
 
-    def __call__(self, cached_sched, now=None, season_start="2018-10-03"):
+    def __call__(self, cached_sched, fetch=True, now=None, season_start="2018-10-03"):
         season_start_f = season_start
         season_start = datetime.datetime.strptime(season_start_f, FMT)
         if not cached_sched:
             cached_sched = []
+
+        if not fetch:
+            return cached_sched
 
         if not now:
             now = datetime.datetime.now()

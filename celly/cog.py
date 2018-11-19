@@ -19,6 +19,11 @@ class Cog(object):
         """
         return self.__call__(**inputs)
 
+    def __repr__(self):
+        cls = self.__class__
+        clsname = "{}.{}".format(cls.__module__, cls.__name__)
+        return "<{} name='{}'>".format(clsname, self.name)
+
 
 class PrintCog(Cog):
     def __call__(self, **inputs):

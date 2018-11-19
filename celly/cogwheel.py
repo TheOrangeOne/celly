@@ -1,5 +1,7 @@
 from functools import reduce
 
+from celly.cog import Cog
+
 
 class CogMissingError(Exception):
     pass
@@ -30,6 +32,14 @@ class CogWheel(object):
             self.subs[cogname].append(new_cog.name)
             self.wait_cogs[new_cog.name] = new_cog
 
+    def map(self, incogname, mapper, outcogname):
+        mappercog = Cog(
+            name=outcogname,
+            inputs=dict(l=incogname),
+            output=lambda l: [mapper(**i) for i in l],
+        )
+        self.add(mappercog)
+
     def _process(self, ready_cogs):
         new_ready_cogs = {}
         for name, cog in ready_cogs.items():
@@ -45,8 +55,8 @@ class CogWheel(object):
                 cogcls = cog.__class__.__name__
                 cog_inputs = ', '.join(cog.inputs.keys())
                 raise CogArgError(
-                    '''Error in {}\n{}. \n'''
-                    '''args: {}'''.format(cogcls, e, cog_inputs)
+                    '''Error in {} '{}'\n{}. \n'''
+                    '''args: {}'''.format(cogcls, cog.name, e, cog_inputs)
                 )
 
             self.computed_cogs[name] = cog
@@ -67,7 +77,7 @@ class CogWheel(object):
         if new_ready_cogs:
             self._process(new_ready_cogs)
 
-    def _validate_cogs(self, initial_cogs, wait_cogs):
+    def _validate_cogs(self, initial_cogs, wait_cogs, computed_cogs):
         if not initial_cogs and wait_cogs:
             missing_cogs = [
                 cogname for cog in wait_cogs.values()
@@ -81,7 +91,8 @@ class CogWheel(object):
             )
         all_cog_names = set(
             [cogname for cogname in initial_cogs] +
-            [cogname for cogname in wait_cogs]
+            [cogname for cogname in wait_cogs] +
+            [cogname for cogname in computed_cogs]
         )
         missing_cogs = [
             cogname for cog in wait_cogs.values()
@@ -95,5 +106,5 @@ class CogWheel(object):
             )
 
     def start(self):
-        self._validate_cogs(self.initial_cogs, self.wait_cogs)
+        self._validate_cogs(self.initial_cogs, self.wait_cogs, self.computed_cogs)
         self._process(self.initial_cogs)
