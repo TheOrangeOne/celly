@@ -116,7 +116,7 @@ wheel.add(TeamsCog(
 
 wheel.add(Cog(
     name="FORCE_CACHE",
-    output=lambda: not os.environ.get("CELLY_FORCE_CACHE", False),
+    output=lambda: not(os.environ.get("CELLY_FORCE_CACHE", "false") == "false"),
 ))
 
 wheel.add(ScheduleUpdateCog(
@@ -221,8 +221,7 @@ wheel.add(TeamRenderCog(
 
 wheel.add(Cog(
     name="GENERATE_GRAPHS",
-    output=lambda: os.environ.get("CELLY_GEN_GRAPHS", True)
-))
+    output=lambda: os.environ.get("CELLY_GEN_GRAPHS", "true") == "true"))
 
 wheel.add(TeamRatingsGraphsCog(
     name="team_rating_graphs",
@@ -297,8 +296,8 @@ wheel.add(WriteJSONFileCog(
     ),
 ))
 
-wheel.add(PrintCog(
-    inputs=dict(),
-))
+# wheel.add(PrintCog(
+#     inputs=dict(_=""),
+# ))
 
 wheel.start()

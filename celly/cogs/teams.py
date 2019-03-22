@@ -46,7 +46,7 @@ class TeamsSVGCog(Cog):
     def __call__(self, teams):
         svgs = []
         for id in teams:
-            svgs.append("{}.svg".format(id))
+            svgs.append(team_svg(id))
         return svgs
 
 

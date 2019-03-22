@@ -27,4 +27,5 @@ class Cog(object):
 
 class PrintCog(Cog):
     def __call__(self, **inputs):
-        print(**inputs)
+        for k, v in inputs.items():
+            print("{}: {}".format(k, v))
