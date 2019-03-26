@@ -197,20 +197,20 @@ wheel.add(TeamsSVGCog(
     ),
 ))
 
-wheel.add(FilterFilesDNECog(
-    name="missing_teams_svg_names",
-    inputs=dict(
-        files="teams_svg_names",
-        directory="build_directory",
-    ),
-))
+# wheel.add(FilterFilesDNECog(
+#     name="missing_teams_svg_names",
+#     inputs=dict(
+#         files="teams_svg_names",
+#         directory="build_directory",
+#     ),
+# ))
 
-wheel.add(TeamsGetSVGCog(
-    name="teams_svgs",
-    inputs=dict(
-        files="missing_teams_svg_names",
-    ),
-))
+# wheel.add(TeamsGetSVGCog(
+#     name="teams_svgs",
+#     inputs=dict(
+#         files="missing_teams_svg_names",
+#     ),
+# ))
 
 wheel.add(TeamRenderCog(
     name="team_pages",
@@ -264,12 +264,12 @@ wheel.add(WriteFilesCog(
     ),
 ))
 
-wheel.add(WriteFilesCog(
-    inputs=dict(
-        files="teams_svgs",
-        directory="build_directory",
-    ),
-))
+# wheel.add(WriteFilesCog(
+#     inputs=dict(
+#         files="teams_svgs",
+#         directory="build_directory",
+#     ),
+# ))
 
 
 wheel.add(WriteJSONFileCog(
