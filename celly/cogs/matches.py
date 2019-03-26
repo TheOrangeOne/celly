@@ -26,18 +26,18 @@ def get_match(game, teams, ratings, diffs):
     home["svg"] = team_img(hid)
     home["score"] = hscore
     home["shots"] = game["linescore"]["teams"]["home"]["shotsOnGoal"]
-    home["w"] = game["teams"]["home"]["leagueRecord"]["wins"]
-    home["l"] = game["teams"]["home"]["leagueRecord"]["losses"]
-    home["otl"] = game["teams"]["home"]["leagueRecord"]["ot"]
+    home["w"] = str(game["teams"]["home"]["leagueRecord"]["wins"]).zfill(2)
+    home["l"] = str(game["teams"]["home"]["leagueRecord"]["losses"]).zfill(2)
+    home["otl"] = str(game["teams"]["home"]["leagueRecord"]["ot"]).zfill(2)
     home["diff"] = diffs[hid]
     home["rating"] = normalize_rating(ratings[hid]["rating"])
     away["abbr"] = get_id_abbr(teams, aid)
     away["svg"] = team_img(aid)
     away["score"] = ascore
     away["shots"] = game["linescore"]["teams"]["away"]["shotsOnGoal"]
-    away["w"] = game["teams"]["away"]["leagueRecord"]["wins"]
-    away["l"] = game["teams"]["away"]["leagueRecord"]["losses"]
-    away["otl"] = game["teams"]["away"]["leagueRecord"]["ot"]
+    away["w"] = str(game["teams"]["away"]["leagueRecord"]["wins"]).zfill(2)
+    away["l"] = str(game["teams"]["away"]["leagueRecord"]["losses"]).zfill(2)
+    away["otl"] = str(game["teams"]["away"]["leagueRecord"]["ot"]).zfill(2)
     away["diff"] = diffs[aid]
     away["rating"] = normalize_rating(ratings[aid]["rating"])
 
