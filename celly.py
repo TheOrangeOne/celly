@@ -116,7 +116,7 @@ wheel.add(TeamsCog(
 
 wheel.add(Cog(
     name="FORCE_CACHE",
-    output=lambda: not(os.environ.get("CELLY_FORCE_CACHE", "false") == "false"),
+    output=lambda: os.environ.get("CELLY_FORCE_CACHE", "false") == "false",
 ))
 
 wheel.add(ScheduleUpdateCog(
