@@ -3,7 +3,7 @@ from celly.cog import Cog
 from datetime import datetime
 
 from celly.cog import Cog
-from celly.cogs.teams import get_id_abbr, team_svg
+from celly.cogs.teams import get_id_abbr
 from celly.date import next_ymd, prev_ymd
 from celly.file import File
 from celly.pages import env

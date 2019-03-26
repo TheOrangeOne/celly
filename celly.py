@@ -23,8 +23,8 @@ from celly.cogs.reddit import (
 from celly.cogs.team import TeamRenderCog
 from celly.cogs.teams import (
     TeamsCog,
-    TeamsGetSVGCog,
-    TeamsSVGCog,
+    # TeamsGetImgCog,
+    # TeamsImgCog,
 )
 from celly.cogs.schedule import ScheduleUpdateCog
 from celly.cogwheel import CogWheel
@@ -187,28 +187,28 @@ wheel.add(RenderDayRatingsCog(
 ))
 
 """
-Team SVG cogs
+Team img cogs
 """
 
-wheel.add(TeamsSVGCog(
-    name="teams_svg_names",
-    inputs=dict(
-        teams="teams"
-    ),
-))
+# wheel.add(TeamsImgCog(
+#     name="teams_img_names",
+#     inputs=dict(
+#         teams="teams"
+#     ),
+# ))
 
 # wheel.add(FilterFilesDNECog(
-#     name="missing_teams_svg_names",
+#     name="missing_teams_img_names",
 #     inputs=dict(
-#         files="teams_svg_names",
+#         files="teams_img_names",
 #         directory="build_directory",
 #     ),
 # ))
 
-# wheel.add(TeamsGetSVGCog(
-#     name="teams_svgs",
+# wheel.add(TeamsGetImgCog(
+#     name="teams_img",
 #     inputs=dict(
-#         files="missing_teams_svg_names",
+#         files="missing_teams_img_names",
 #     ),
 # ))
 

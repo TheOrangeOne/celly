@@ -3,7 +3,7 @@ from celly.file import File
 from celly.rating import normalize_rating
 from celly.pages import env
 from celly.pages.team import team_page, team_rating_graph
-from celly.cogs.teams import team_svg
+from celly.cogs.teams import team_img
 
 
 class TeamRenderCog(Cog):
@@ -15,7 +15,7 @@ class TeamRenderCog(Cog):
             abbr = team["abbreviation"]
             r = temp.render(
                 team=team,
-                img_src=team_svg(id),
+                img_src=team_img(id),
                 graph_src=team_rating_graph(id),
             )
             page = File(

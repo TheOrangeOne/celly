@@ -38,7 +38,7 @@ class TeamsCog(Cog):
         return teams
 
 
-class TeamsSVGCog(Cog):
+class TeamsImgCog(Cog):
     """
     Input: teams dict
     Output: list of svg files for each team
@@ -46,15 +46,15 @@ class TeamsSVGCog(Cog):
     def __call__(self, teams):
         svgs = []
         for id in teams:
-            svgs.append(team_svg(id))
+            svgs.append(team_img(id))
         return svgs
 
 
-def team_svg(id):
-    return "{}.png".format(id)
+def team_img(id):
+    return "{}_logo.png".format(id)
 
 
-class TeamsGetSVGCog(Cog):
+class TeamsGetImgCog(Cog):
     """
     Input: list of svg files to get
     Output: list of svg files retrieved from NHL api

@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 from celly.date import next_ymd, prev_ymd
 from celly.cog import Cog
-from celly.cogs.teams import get_id_abbr, team_svg
+from celly.cogs.teams import get_id_abbr, team_img
 from celly.file import File
 from celly.pages import env
 from celly.pages.ratings import ratings_page
@@ -77,7 +77,7 @@ def day_ratings(ratings, prev_ratings, teams):
             abbr=abbr,
             diff=diff,
             rating=nrating,
-            svg=team_svg(id),
+            svg=team_img(id),
         ))
     ratings_for_day = sorted(
         ratings_for_day,

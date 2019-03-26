@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from celly.cog import Cog
-from celly.cogs.teams import get_id_abbr, team_svg
+from celly.cogs.teams import get_id_abbr, team_img
 from celly.date import next_ymd, prev_ymd
 from celly.file import File
 from celly.pages import env
@@ -23,7 +23,7 @@ def get_match(game, teams, ratings, diffs):
 
     ascore, hscore = get_scores(game)
     home["abbr"] = get_id_abbr(teams, hid)
-    home["svg"] = team_svg(hid)
+    home["svg"] = team_img(hid)
     home["score"] = hscore
     home["shots"] = game["linescore"]["teams"]["home"]["shotsOnGoal"]
     home["w"] = game["teams"]["home"]["leagueRecord"]["wins"]
@@ -32,7 +32,7 @@ def get_match(game, teams, ratings, diffs):
     home["diff"] = diffs[hid]
     home["rating"] = normalize_rating(ratings[hid]["rating"])
     away["abbr"] = get_id_abbr(teams, aid)
-    away["svg"] = team_svg(aid)
+    away["svg"] = team_img(aid)
     away["score"] = ascore
     away["shots"] = game["linescore"]["teams"]["away"]["shotsOnGoal"]
     away["w"] = game["teams"]["away"]["leagueRecord"]["wins"]
